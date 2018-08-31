@@ -1,0 +1,10 @@
+target/
+project/project/
+project/target/
+.idea
+.DS_Store
+pwa/node_modules
+pwa/package-lock.json
+pwa/dist
+pwa/*.zip
+pwa/.DS_Store
