@@ -3,6 +3,7 @@ const ASSETS = [
     'index.html',
     'offline.html',
     'style.css',
+    'w3.4.10.css',
     'favicon.ico',
     'logo.png',
     'logo-96.png',
