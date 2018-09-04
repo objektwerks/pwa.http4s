@@ -9,14 +9,10 @@ import org.http4s.dsl.impl.Root
 import org.http4s.dsl.io._
 
 object TodoService {
-  case class Todo(task: String, assigned: String, completed: Option[String])
-
-  object Todo {
-    implicit val todoDecoder = jsonOf[IO, Todo]
-  }
+  import TodoRepository._
 
   val todoService = HttpService[IO] {
-    case GET -> Root / "todos" => Ok(List[Todo]().asJson)
+    case GET -> Root / "todos" => Ok(select.asJson)
     case POST -> Root / "todo" => Ok()
   }
 }
