@@ -7,10 +7,10 @@ import org.http4s.server.blaze._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object App extends StreamApp[IO] {
+object TodoApp extends StreamApp[IO] {
   override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] =
     BlazeBuilder[IO]
       .bindHttp(7777)
-      .mountService(Services.nowService, "/api/v1")
+      .mountService(TodoService.todoService, "/api/v1")
       .serve
 }
