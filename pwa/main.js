@@ -1,5 +1,5 @@
 export default () => {
-    const SYNC = 'pwa-sync';
+    const SYNC = 'todo-sync';
 
     navigator.serviceWorker.
     register('./service-worker.js').

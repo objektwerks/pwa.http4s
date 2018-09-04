@@ -1,4 +1,4 @@
-const CACHE = 'pwa-cache';
+const CACHE = 'todo-cache';
 const ASSETS = [
     'index.html',
     'offline.html',
@@ -19,7 +19,7 @@ const ASSETS = [
     'main.js',
     'service-worker.js'
 ];
-const SYNC = 'pwa-sync';
+const SYNC = 'todo-sync';
 
 function preCache() {
     return caches.open(CACHE).then(cache => {
