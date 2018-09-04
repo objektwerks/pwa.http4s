@@ -1,12 +1,7 @@
-drop table if exists worker;
-drop table if exists task;
-create table worker (
+drop table if exists todo;
+create table todo (
   id int primary key auto_increment not null,
-  name varchar(64) not null
-);
-create table task (
-  id int primary key auto_increment not null,
-  workerId int not null,
-  task varchar(128) not null,
-  foreign key(workerId) references worker(id)
+  task varchar(256) not null
+  assigned varchar(64) not null
+  completed varchar(64) not null
 );
