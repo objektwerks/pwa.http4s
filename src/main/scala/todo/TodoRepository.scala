@@ -6,10 +6,12 @@ import doobie.implicits._
 
 import scala.io.Source
 
-case class TodoRepositoryConfig(driver: String, url: String, user: String, password: String)
+case class TodoRepositoryConfig(schema: String, driver: String, url: String, user: String, password: String)
 
-case class TodoRepository(config: TodoRepositoryConfig) {
+case class TodoRepository(config: TodoRepositoryConfig, init: Boolean = false) {
   private val db = Transactor.fromDriverManager[IO](config.driver, config.url, config.user, config.password)
+
+  if (init) init(config.schema)
 
   def init(schemaPath: String): Int = {
     val schema = Source.fromInputStream(getClass.getResourceAsStream(schemaPath)).mkString
