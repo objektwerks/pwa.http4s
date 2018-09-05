@@ -16,13 +16,13 @@ case class TodoService(repository: TodoRepository) {
     case request @ POST -> Root / "todo" =>
       for {
         todo <- request.as[Todo]
-        result <- Ok(repository.insert(todo).asJson)
-      } yield result
+        response <- Ok(repository.insert(todo).asJson)
+      } yield response
     case request @ PUT -> Root / "todo" =>
       for {
         todo <- request.as[Todo]
-        result <- Ok(repository.update(todo).asJson)
-      } yield result
+        response <- Ok(repository.update(todo).asJson)
+      } yield response
     case DELETE -> Root / "todo" / IntVar(id) => Ok(repository.delete(id))
   }
 }
