@@ -22,12 +22,12 @@ case class TodoRepository(config: TodoRepositoryConfig) {
   }
 
   def insert(todo: Todo): Int = {
-    val insert = sql"insert into todo(task, assigned, completed) values (${todo.task}, ${todo.assigned}, ${todo.completed.get})".update
+    val insert = sql"insert into todo(id, task, assigned, completed) values (${todo.id}, ${todo.task}, ${todo.assigned}, ${todo.completed.get})".update
     insert.run.transact(db).unsafeRunSync
   }
 
   def update(todo: Todo): Int = {
-    val update = sql"update todo set task = ${todo.task}, assigned = ${todo.assigned}, completed = ${todo.completed.get} where id = ${todo.id}".update
+    val update = sql"update todo set task = ${todo.task}, completed = ${todo.completed.get} where id = ${todo.id}".update
     update.run.transact(db).unsafeRunSync
   }
 
