@@ -1,6 +1,7 @@
 package todo
 
-import java.time.LocalDate
+import java.sql.Timestamp
+import java.time.Instant
 
 import cats.effect.IO
 import io.circe.generic.auto._
@@ -43,7 +44,7 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
     assert(get.length == 1)
 
     // Put
-    val completedTodo = todoWithId.copy(completed = Some(LocalDate.now.toString))
+    val completedTodo = todoWithId.copy(completed = Some(Timestamp.from(Instant.now)))
     assert(put(completedTodo) == 1)
     println(completedTodo)
 
