@@ -6,7 +6,7 @@ import cats.effect.IO
 import org.http4s.client.blaze.Http1Client
 import org.http4s.dsl.io.uri
 import org.http4s.server.blaze.BlazeBuilder
-import org.http4s.{Method, Request}
+import org.http4s.{Method, Request, Uri}
 import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 
 class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
@@ -32,6 +32,9 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
     val todo = Todo(task = "wash car", assigned = LocalDate.now.toString)
     assert(post(todo) == 1)
     assert(get == 1)
+    val completedTodo = todo.copy(completed = Some(LocalDate.now.toString))
+    assert(put(todo) == 1)
+    assert(delete(completedTodo.id) == 1)
   }
 
   def post(todo: Todo): Int = {
@@ -47,6 +50,21 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
     val result = todos.length
     assert(result == 1)
     todos.foreach(println)
+    result
+  }
+
+  def put(todo: Todo): Int = {
+    val put = Request[IO](Method.PUT, uri("http://localhost:7979/api/v1/todo")).withBody(todo)
+    val result = client.expect[Int](put).unsafeRunSync()
+    assert(result == 1)
+    result
+  }
+
+  def delete(id: Int): Int = {
+    val url = s"http://localhost:7979/api/v1/todos/$id"
+    val delete = Request[IO](Method.DELETE, Uri.fromString(url).toOption.get)
+    val result = client.expect[Int](delete).unsafeRunSync()
+    assert(result == 1)
     result
   }
 }
