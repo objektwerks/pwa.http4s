@@ -23,6 +23,6 @@ case class TodoService(repository: TodoRepository) {
         todo <- request.as[Todo]
         response <- Ok(repository.update(todo).asJson)
       } yield response
-    case DELETE -> Root / "todo" / IntVar(id) => Ok(repository.delete(id))
+    case DELETE -> Root / "todos" / IntVar(id) => Ok(repository.delete(id))
   }
 }
