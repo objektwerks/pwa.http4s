@@ -32,14 +32,29 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
   }
 
   test("todo") {
-    val todo = Todo(task = "wash car", assigned = LocalDate.now.toString)
-    assert(post(todo) == 1)
-    val todoWithId = get.head
+    // Post
+    val todo = Todo(task = "wash car")
+    val id = post(todo)
+    assert(id > 0)
+    val todoWithId = todo.copy(id = id)
     println(todoWithId)
+
+    // Get
+    assert(get.length == 1)
+
+    // Put
     val completedTodo = todoWithId.copy(completed = Some(LocalDate.now.toString))
     assert(put(completedTodo) == 1)
+    println(completedTodo)
+
+    // Delete
     assert(delete(completedTodo.id) == 1)
+
+    // Get
     assert(get.isEmpty)
+
+    // Post
+    assert(post(Todo(task = "drink beer")) == 2)
   }
 
   def post(todo: Todo): Int = {

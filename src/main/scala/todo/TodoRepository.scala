@@ -24,8 +24,12 @@ case class TodoRepository(config: TodoRepositoryConfig, init: Boolean = false) {
   }
 
   def insert(todo: Todo): Int = {
-    val insert = sql"insert into todo(task, assigned, completed) values (${todo.task}, ${todo.assigned}, ${todo.completed})".update
-    insert.run.transact(xa).unsafeRunSync
+    val insert = for {
+      id <- sql"insert into todo(task, assigned, completed) values (${todo.task}, ${todo.assigned}, ${todo.completed})"
+        .update
+        .withUniqueGeneratedKeys[Int]("id")
+    } yield id
+    insert.transact(xa).unsafeRunSync
   }
 
   def update(todo: Todo): Int = {
