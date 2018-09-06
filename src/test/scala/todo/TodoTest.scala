@@ -29,12 +29,12 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
   }
 
   test("todo") {
-    assert(post == 1)
+    val todo = Todo(task = "wash car", assigned = LocalDate.now.toString)
+    assert(post(todo) == 1)
     assert(get == 1)
   }
 
-  def post: Int = {
-    val todo = Todo(task = "wash car", assigned = LocalDate.now.toString)
+  def post(todo: Todo): Int = {
     val post = Request[IO](Method.POST, uri("http://localhost:7979/api/v1/todo")).withBody(todo)
     val result = client.expect[Int](post).unsafeRunSync()
     assert(result == 1)
