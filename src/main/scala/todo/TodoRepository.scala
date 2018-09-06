@@ -29,7 +29,7 @@ case class TodoRepository(config: TodoRepositoryConfig, init: Boolean = false) {
   }
 
   def update(todo: Todo): Int = {
-    val update = sql"update todo set task = ${todo.task}, completed = ${todo.completed.get} where id = ${todo.id}".update
+    val update = sql"update todo set task = ${todo.task}, completed = ${todo.completed} where id = ${todo.id}".update
     update.run.transact(xa).unsafeRunSync
   }
 
