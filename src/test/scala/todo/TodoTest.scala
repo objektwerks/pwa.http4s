@@ -35,36 +35,29 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
     val completedTodo = todo.copy(completed = Some(LocalDate.now.toString))
     assert(put(todo) == 1)
     assert(delete(completedTodo.id) == 1)
+    assert(get == 0)
   }
 
   def post(todo: Todo): Int = {
     val post = Request[IO](Method.POST, uri("http://localhost:7979/api/v1/todo")).withBody(todo)
-    val result = client.expect[Int](post).unsafeRunSync()
-    assert(result == 1)
-    result
+    client.expect[Int](post).unsafeRunSync()
   }
 
   def get: Int = {
     val get = Request[IO](Method.GET, uri("http://localhost:7979/api/v1/todos"))
     val todos = client.expect[List[Todo]](get).unsafeRunSync()
-    val result = todos.length
-    assert(result == 1)
     todos.foreach(println)
-    result
+    todos.length
   }
 
   def put(todo: Todo): Int = {
     val put = Request[IO](Method.PUT, uri("http://localhost:7979/api/v1/todo")).withBody(todo)
-    val result = client.expect[Int](put).unsafeRunSync()
-    assert(result == 1)
-    result
+    client.expect[Int](put).unsafeRunSync()
   }
 
   def delete(id: Int): Int = {
     val url = s"http://localhost:7979/api/v1/todos/$id"
     val delete = Request[IO](Method.DELETE, Uri.fromString(url).toOption.get)
-    val result = client.expect[Int](delete).unsafeRunSync()
-    assert(result == 1)
-    result
+    client.expect[Int](delete).unsafeRunSync()
   }
 }
