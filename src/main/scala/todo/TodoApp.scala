@@ -15,6 +15,9 @@ object TodoApp extends StreamApp[IO] {
         .bindHttp(config.server.port, config.server.host)
         .mountService(TodoService(TodoRepository(config.database, init = true)).instance, "/api/v1")
         .serve
-    } yield exitCode
+    } yield {
+      sys.addShutdownHook(requestShutdown.unsafeRunSync)
+      exitCode
+    }
   }
 }
