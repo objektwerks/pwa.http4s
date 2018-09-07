@@ -46,8 +46,8 @@ class TodoTest extends FunSuite with BeforeAndAfterAll {
 
   test("post") {
     val todo = Todo(task = "buy beer")
-    val id = post(todo)
-    assert(id.value == 1)
+    val inserted = post(todo)
+    assert(inserted.id == 1)
   }
 
   test("get") {
@@ -58,19 +58,19 @@ class TodoTest extends FunSuite with BeforeAndAfterAll {
   test("put") {
     val todo = get.head
     val completedTodo = todo.copy(completed = Some(Timestamp.from(Instant.now)))
-    assert(put(completedTodo).value == 1)
+    assert(put(completedTodo).id == 1)
   }
 
   test("delete") {
     val todo = get.head
-    assert(delete(todo.id).value == 1)
+    assert(delete(todo.id).id == 1)
     assert(get.isEmpty)
-    assert(post(Todo(task = "drink beer")).value == 2)
+    assert(post(Todo(task = "drink beer")).id == 2)
   }
 
-  def post(todo: Todo): Id = {
+  def post(todo: Todo): Inserted = {
     val post = Request[IO](Method.POST, todosUri).withBody(todo.asJson)
-    client.expect[Id](post).unsafeRunSync
+    client.expect[Inserted](post).unsafeRunSync
   }
 
   def get: List[Todo] = {

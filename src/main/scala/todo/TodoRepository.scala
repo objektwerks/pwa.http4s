@@ -5,7 +5,7 @@ import java.sql.Timestamp
 import cats.effect._
 import doobie._
 import doobie.implicits._
-import todo.Todo.{Deleted, Id, Updated}
+import todo.Todo.{Deleted, Inserted, Updated}
 
 import scala.io.Source
 
@@ -24,11 +24,11 @@ case class TodoRepository(xa: Transactor[IO], schema: String) {
 
   def select: List[Todo] = selectTodos.to[List].transact(xa).unsafeRunSync
 
-  def insert(todo: Todo): Id = {
+  def insert(todo: Todo): Inserted = {
     val insert = for {
       id <- insertTodo.toUpdate0((todo.task, todo.assigned, todo.completed)).withUniqueGeneratedKeys[Int]("id")
     } yield id
-    Id(insert.transact(xa).unsafeRunSync)
+    Inserted(insert.transact(xa).unsafeRunSync)
   }
 
   def update(todo: Todo): Updated = {
