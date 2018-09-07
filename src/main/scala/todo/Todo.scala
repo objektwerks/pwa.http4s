@@ -26,8 +26,8 @@ object Todo {
   }
 
   case class Inserted(id: Int)
-  implicit val idDecoder = jsonOf[IO, Inserted]
-  implicit val idEncoder = jsonEncoderOf[IO, Inserted]
+  implicit val insertedDecoder = jsonOf[IO, Inserted]
+  implicit val insertedEncoder = jsonEncoderOf[IO, Inserted]
 
 
   case class Updated(id: Int)
