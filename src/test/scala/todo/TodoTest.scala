@@ -59,7 +59,7 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
   }
 
   def post(todo: Todo): Int = {
-    val post = Request[IO](Method.POST, uri("http://localhost:7979/api/v1/todo")).withBody(todo.asJson)
+    val post = Request[IO](Method.POST, uri("http://localhost:7979/api/v1/todos")).withBody(todo.asJson)
     client.expect[Int](post).unsafeRunSync
   }
 
@@ -69,7 +69,7 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
   }
 
   def put(todo: Todo): Int = {
-    val put = Request[IO](Method.PUT, uri("http://localhost:7979/api/v1/todo")).withBody(todo.asJson)
+    val put = Request[IO](Method.PUT, uri("http://localhost:7979/api/v1/todos")).withBody(todo.asJson)
     client.expect[Int](put).unsafeRunSync
   }
 

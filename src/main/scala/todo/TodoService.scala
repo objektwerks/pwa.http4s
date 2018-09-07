@@ -13,16 +13,16 @@ case class TodoService(repository: TodoRepository) {
 
   val instance = HttpService[IO] {
     case GET -> Root / "todos" => Ok(repository.select.asJson)
-    case request @ POST -> Root / "todo" =>
+    case request @ POST -> Root / "todos" =>
       for {
         todo <- request.as[Todo]
         response <- Ok(repository.insert(todo).asJson)
       } yield response
-    case request @ PUT -> Root / "todo" =>
+    case request @ PUT -> Root / "todos" =>
       for {
         todo <- request.as[Todo]
         response <- Ok(repository.update(todo).asJson)
       } yield response
-    case DELETE -> Root / "todos" / IntVar(id) => Ok(repository.delete(id))
+    case DELETE -> Root / "todos" / IntVar(id) => Ok(repository.delete(id).asJson)
   }
 }
