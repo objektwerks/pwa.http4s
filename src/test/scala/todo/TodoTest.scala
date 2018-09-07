@@ -21,17 +21,13 @@ class TodoTest extends FunSuite with BeforeAndAfterAll {
   import Todo._
 
   val server = for {
-    config <- loadConfig[Config](ConfigFactory.load("test.conf"))
-    database = config.database
-    xa = Transactor.fromDriverManager[IO](
-      database.driver,
-      database.url,
-      database.user,
-      database.password)
-    repository = TodoRepository(xa, database.schema)
+    conf <- loadConfig[Config](ConfigFactory.load("test.conf"))
+    db = conf.database
+    xa = Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
+    repository = TodoRepository(xa, db.schema)
     service = TodoService(repository)
     io = BlazeBuilder[IO]
-      .bindHttp(config.server.port)
+      .bindHttp(conf.server.port)
       .mountService(service.instance, "/api/v1")
       .start
       .unsafeRunSync
