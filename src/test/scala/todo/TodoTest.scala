@@ -16,7 +16,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
   import Todo._
 
-  val todoRepositoryConfig = TodoRepositoryConfig("/schema.sql", "org.h2.Driver", "jdbc:h2:./target/testdb", "", "")
+  val todoRepositoryConfig = TodoRepositoryConfig("/schema.sql", "org.h2.Driver", "jdbc:h2:./target/testdb", "sa", "sa")
   val todoRepository = TodoRepository(todoRepositoryConfig, init = true)
   val todoService = TodoService(todoRepository)
 
