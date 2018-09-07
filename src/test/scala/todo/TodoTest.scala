@@ -12,11 +12,11 @@ import org.http4s.client.blaze.Http1Client
 import org.http4s.dsl.io.uri
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.{Method, Request, Uri}
-import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
+import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import pureconfig.loadConfig
 import todo.TodoConfig.Config
 
-class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
+class TodoTest extends FunSuite with BeforeAndAfterAll {
   import Todo._
 
   val server = for {
