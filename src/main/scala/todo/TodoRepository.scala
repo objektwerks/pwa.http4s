@@ -5,12 +5,11 @@ import java.sql.Timestamp
 import cats.effect._
 import doobie._
 import doobie.implicits._
+import TodoConfig.DatabaseConfig
 
 import scala.io.Source
 
-case class TodoRepositoryConfig(schema: String, driver: String, url: String, user: String, password: String)
-
-case class TodoRepository(config: TodoRepositoryConfig, init: Boolean = false) {
+case class TodoRepository(config: DatabaseConfig, init: Boolean = false) {
   val xa = Transactor.fromDriverManager[IO](config.driver, config.url, config.user, config.password)
   val selectTodos = sql"select * from todo".query[Todo]
   val insertTodo = Update[(String, Timestamp, Option[Timestamp])]("insert into todo(task, assigned, completed) values (?, ?, ?)")

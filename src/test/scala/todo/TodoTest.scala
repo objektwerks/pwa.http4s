@@ -4,6 +4,7 @@ import java.sql.Timestamp
 import java.time.Instant
 
 import cats.effect.IO
+import com.typesafe.config.ConfigFactory
 import io.circe.generic.auto._
 import io.circe.syntax._
 import org.http4s.circe._
@@ -12,24 +13,27 @@ import org.http4s.dsl.io.uri
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.{Method, Request, Uri}
 import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
+import pureconfig.loadConfig
+import todo.TodoConfig.Config
 
 class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
   import Todo._
 
-  val todoRepositoryConfig = TodoRepositoryConfig("/schema.sql", "org.h2.Driver", "jdbc:h2:./target/testdb", "sa", "sa")
-  val todoRepository = TodoRepository(todoRepositoryConfig, init = true)
-  val todoService = TodoService(todoRepository)
-
-  val server = BlazeBuilder[IO]
-    .bindHttp(7979)
-    .mountService(todoService.instance, "/api/v1")
-    .start
-    .unsafeRunSync
+  val server = for {
+    config <- loadConfig[Config] (ConfigFactory.load("test.conf"))
+    repository = TodoRepository(config.database, init = true)
+    service = TodoService(repository)
+    io = BlazeBuilder[IO]
+      .bindHttp(config.server.port)
+      .mountService(service.instance, "/api/v1")
+      .start
+      .unsafeRunSync
+  } yield io
   val client = Http1Client[IO]().unsafeRunSync
   val todosUri = uri("http://localhost:7979/api/v1/todos")
 
   override protected def afterAll(): Unit = {
-    server.shutdownNow
+    server.map(s => s.shutdownNow)
     client.shutdownNow
   }
 
