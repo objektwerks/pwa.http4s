@@ -28,7 +28,7 @@ class TodoTest extends FunSuite with BeforeAndAfterAll {
       database.url,
       database.user,
       database.password)
-    repository = TodoRepository(xa, database.schema, init = true)
+    repository = TodoRepository(xa, database.schema)
     service = TodoService(repository)
     io = BlazeBuilder[IO]
       .bindHttp(config.server.port)

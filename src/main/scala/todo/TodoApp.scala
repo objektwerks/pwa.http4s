@@ -20,7 +20,7 @@ object TodoApp extends StreamApp[IO] {
         database.password))
       exitCode <- BlazeBuilder[IO]
         .bindHttp(config.server.port, config.server.host)
-        .mountService(TodoService(TodoRepository(xa, database.schema, init = true)).instance, "/api/v1")
+        .mountService(TodoService(TodoRepository(xa, database.schema)).instance, "/api/v1")
         .serve
     } yield {
       sys.addShutdownHook(requestShutdown.unsafeRunSync)

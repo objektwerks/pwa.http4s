@@ -8,13 +8,13 @@ import doobie.implicits._
 
 import scala.io.Source
 
-case class TodoRepository(xa: Transactor[IO], schema: String, init: Boolean = false) {
+case class TodoRepository(xa: Transactor[IO], schema: String) {
   val selectTodos = sql"select * from todo".query[Todo]
   val insertTodo = Update[(String, Timestamp, Option[Timestamp])]("insert into todo(task, assigned, completed) values (?, ?, ?)")
   val updateTodo = Update[(String, Option[Timestamp], Int)]("update todo set task = ?, completed = ? where id = ?")
   val deleteTodo = Update[Int]("delete from todo where id = ?")
 
-  if (init) init(schema)
+  try { select.length } catch { case _: Throwable => init(schema) }
 
   def init(schemaPath: String): Int = {
     val schema = Source.fromInputStream(getClass.getResourceAsStream(schemaPath)).mkString
