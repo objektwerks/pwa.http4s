@@ -26,56 +26,55 @@ class TodoTest extends FunSuite with Matchers with BeforeAndAfterAll {
     .start
     .unsafeRunSync
   val client = Http1Client[IO]().unsafeRunSync
+  val todosUri = uri("http://localhost:7979/api/v1/todos")
 
   override protected def afterAll(): Unit = {
     server.shutdownNow
     client.shutdownNow
   }
 
-  test("todo") {
-    // Post
-    val todo = Todo(task = "wash car")
+  test("post") {
+    val todo = Todo(task = "buy beer")
     val id = post(todo)
-    assert(id > 0)
-    val todoWithId = todo.copy(id = id)
-    println(todoWithId)
+    assert(id == 1)
+  }
 
-    // Get
-    assert(get.length == 1)
+  test("get") {
+    val todos = get
+    assert(todos.length == 1)
+  }
 
-    // Put
-    val completedTodo = todoWithId.copy(completed = Some(Timestamp.from(Instant.now)))
+  test("put") {
+    val todo = get.head
+    val completedTodo = todo.copy(completed = Some(Timestamp.from(Instant.now)))
     assert(put(completedTodo) == 1)
-    println(completedTodo)
+  }
 
-    // Delete
-    assert(delete(completedTodo.id) == 1)
-
-    // Get
+  test("delete") {
+    val todo = get.head
+    assert(delete(todo.id) == 1)
     assert(get.isEmpty)
-
-    // Post
     assert(post(Todo(task = "drink beer")) == 2)
   }
 
   def post(todo: Todo): Int = {
-    val post = Request[IO](Method.POST, uri("http://localhost:7979/api/v1/todos")).withBody(todo.asJson)
+    val post = Request[IO](Method.POST, todosUri).withBody(todo.asJson)
     client.expect[Int](post).unsafeRunSync
   }
 
   def get: List[Todo] = {
-    val get = Request[IO](Method.GET, uri("http://localhost:7979/api/v1/todos"))
+    val get = Request[IO](Method.GET, todosUri)
     client.expect[List[Todo]](get).unsafeRunSync
   }
 
   def put(todo: Todo): Int = {
-    val put = Request[IO](Method.PUT, uri("http://localhost:7979/api/v1/todos")).withBody(todo.asJson)
+    val put = Request[IO](Method.PUT, todosUri).withBody(todo.asJson)
     client.expect[Int](put).unsafeRunSync
   }
 
   def delete(id: Int): Int = {
-    val url = s"http://localhost:7979/api/v1/todos/$id"
-    val delete = Request[IO](Method.DELETE, Uri.fromString(url).toOption.get)
+    val url = s"${todosUri.toString}/$id"
+    val delete = Request[IO](Method.DELETE, Uri.unsafeFromString(url))
     client.expect[Int](delete).unsafeRunSync
   }
 }
