@@ -4,10 +4,10 @@
         <file>./target/test.log.txt</file>
         <append>true</append>
         <encoder>
-            <pattern>%X{akkaTimestamp} %-5level %logger{36} %X{akkaSource} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
     <root level="DEBUG">
-        <appender-ref ref="file"/>ccl
+        <appender-ref ref="file"/>
     </root>
 </configuration>
