@@ -20,7 +20,7 @@ object Todo {
 
   implicit val todoListDecoder = jsonOf[IO, List[Todo]]
 
-  implicit val TimestampFormat: Encoder[Timestamp] with Decoder[Timestamp] = new Encoder[Timestamp] with Decoder[Timestamp] {
+  implicit val timestampEncoderDecoder: Encoder[Timestamp] with Decoder[Timestamp] = new Encoder[Timestamp] with Decoder[Timestamp] {
     override def apply(timestamp: Timestamp): Json = Encoder.encodeLong.apply(timestamp.getTime)
     override def apply(cursor: HCursor): Result[Timestamp] = Decoder.decodeLong.map(long => new Timestamp(long)).apply(cursor)
   }
