@@ -5,18 +5,16 @@ import java.sql.Timestamp
 import cats.effect._
 import doobie._
 import doobie.implicits._
-import TodoConfig.DatabaseConfig
 
 import scala.io.Source
 
-case class TodoRepository(config: DatabaseConfig, init: Boolean = false) {
-  val xa = Transactor.fromDriverManager[IO](config.driver, config.url, config.user, config.password)
+case class TodoRepository(xa: Transactor[IO], schema: String, init: Boolean = false) {
   val selectTodos = sql"select * from todo".query[Todo]
   val insertTodo = Update[(String, Timestamp, Option[Timestamp])]("insert into todo(task, assigned, completed) values (?, ?, ?)")
   val updateTodo = Update[(String, Option[Timestamp], Int)]("update todo set task = ?, completed = ? where id = ?")
   val deleteTodo = Update[Int]("delete from todo where id = ?")
 
-  if (init) init(config.schema)
+  if (init) init(schema)
 
   def init(schemaPath: String): Int = {
     val schema = Source.fromInputStream(getClass.getResourceAsStream(schemaPath)).mkString
