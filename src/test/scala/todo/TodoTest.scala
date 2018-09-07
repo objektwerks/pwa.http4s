@@ -20,7 +20,7 @@ import todo.TodoConfig.Config
 class TodoTest extends FunSuite with BeforeAndAfterAll {
   import Todo._
 
-  for {
+  val server = for {
     config <- loadConfig[Config](ConfigFactory.load("test.conf"))
     database = config.database
     xa = Transactor.fromDriverManager[IO](
@@ -35,13 +35,12 @@ class TodoTest extends FunSuite with BeforeAndAfterAll {
       .mountService(service.instance, "/api/v1")
       .start
       .unsafeRunSync
-  } yield {
-    sys.addShutdownHook(io.shutdownNow)
-  }
+  } yield io
   val client = Http1Client[IO]().unsafeRunSync
   val todosUri = uri("http://localhost:7979/api/v1/todos")
 
   override protected def afterAll(): Unit = {
+    server.map(s => s.shutdownNow)
     client.shutdownNow
   }
 
