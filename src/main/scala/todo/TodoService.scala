@@ -8,7 +8,7 @@ import org.http4s.circe._
 import org.http4s.dsl.impl.Root
 import org.http4s.dsl.io._
 
-case class TodoService(repository: TodoRepository) {
+class TodoService(repository: TodoRepository) {
   import Todo._
 
   val instance = HttpService[IO] {
@@ -25,4 +25,8 @@ case class TodoService(repository: TodoRepository) {
       } yield response
     case DELETE -> Root / "todos" / IntVar(id) => Ok(repository.delete(id).asJson)
   }
+}
+
+object TodoService {
+  def apply(repository: TodoRepository): TodoService = new TodoService(repository)
 }

@@ -9,7 +9,7 @@ import todo.Todo.{Deleted, Inserted, Updated}
 
 import scala.io.Source
 
-case class TodoRepository(xa: Transactor[IO], schema: String) {
+class TodoRepository(xa: Transactor[IO], schema: String) {
   val selectTodos = sql"select * from todo".query[Todo]
   val insertTodo = Update[(String, Timestamp, Option[Timestamp])]("insert into todo(task, assigned, completed) values (?, ?, ?)")
   val updateTodo = Update[(String, Option[Timestamp], Int)]("update todo set task = ?, completed = ? where id = ?")
@@ -38,4 +38,8 @@ case class TodoRepository(xa: Transactor[IO], schema: String) {
   def delete(id: Int): Deleted = {
     Deleted(deleteTodo.toUpdate0(id).run.transact(xa).unsafeRunSync)
   }
+}
+
+object TodoRepository {
+  def apply(xa: Transactor[IO], schema: String): TodoRepository = new TodoRepository(xa, schema)
 }
