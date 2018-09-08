@@ -5,6 +5,7 @@ import java.time.Instant
 
 import cats.effect.IO
 import com.typesafe.config.ConfigFactory
+import doobie.scalatest._
 import doobie.util.transactor.Transactor
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -17,25 +18,40 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import pureconfig.loadConfig
 import todo.TodoConfig.Config
 
-class TodoTest extends FunSuite with BeforeAndAfterAll {
+class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
   import Todo._
 
   val server = for {
     conf <- loadConfig[Config](ConfigFactory.load("test.conf"))
     db = conf.database
     xa = Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
+    repo = TodoRepository(xa, db.schema)
     io = BlazeBuilder[IO]
       .bindHttp(conf.server.port)
-      .mountService(TodoService(TodoRepository(xa, db.schema)).instance, "/api/v1")
+      .mountService(TodoService(repo).instance, "/api/v1")
       .start
       .unsafeRunSync
-  } yield io
+  } yield {
+    check(repo.selectTodos)
+    check(repo.insertTodo)
+    check(repo.updateTodo)
+    check(repo.deleteTodo)
+    io
+  }
   val client = Http1Client[IO]().unsafeRunSync
   val todosUri = uri("http://localhost:7979/api/v1/todos")
 
   override protected def afterAll(): Unit = {
     server.map(s => s.shutdownNow)
     client.shutdownNow
+  }
+
+  override def transactor: Transactor[IO] = {
+    val result = for {
+      conf <- loadConfig[Config](ConfigFactory.load("test.conf"))
+      db = conf.database
+    } yield Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
+    result.toOption.get
   }
 
   test("post") {

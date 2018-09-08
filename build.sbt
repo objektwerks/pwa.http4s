@@ -24,6 +24,7 @@ libraryDependencies ++= {
     "com.github.pureconfig" % "pureconfig_2.12" % "0.9.2",
     "com.typesafe.scala-logging" % "scala-logging_2.12" % "3.9.0",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
+    "org.tpolecat" % "doobie-scalatest_2.12" % doobieVersion % "test",
     "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"
   )
 }
