@@ -11,16 +11,16 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object TodoApp extends StreamApp[IO] {
   override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] = {
     for {
-      config <- Stream.eval(TodoConfig.load())
-      database = config.database
+      conf <- Stream.eval(TodoConfig.load())
+      db = conf.database
       xa <- Stream.eval(HikariTransactor.newHikariTransactor[IO](
-        database.driver,
-        database.url,
-        database.user,
-        database.password))
+        db.driver,
+        db.url,
+        db.user,
+        db.password))
       exitCode <- BlazeBuilder[IO]
-        .bindHttp(config.server.port, config.server.host)
-        .mountService(TodoService(TodoRepository(xa, database.schema)).instance, "/api/v1")
+        .bindHttp(conf.server.port, conf.server.host)
+        .mountService(TodoService(TodoRepository(xa, db.schema)).instance, "/api/v1")
         .serve
     } yield {
       sys.addShutdownHook(requestShutdown.unsafeRunSync)
