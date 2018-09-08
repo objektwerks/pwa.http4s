@@ -47,11 +47,11 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
   }
 
   override def transactor: Transactor[IO] = {
-    val result = for {
+    val xa = for {
       conf <- loadConfig[Config](ConfigFactory.load("test.conf"))
       db = conf.database
     } yield Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
-    result.toOption.get
+    xa.toOption.get
   }
 
   test("post") {
