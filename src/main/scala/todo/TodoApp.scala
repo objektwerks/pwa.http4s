@@ -13,11 +13,7 @@ object TodoApp extends StreamApp[IO] {
     for {
       conf <- Stream.eval(TodoConfig.load())
       db = conf.database
-      xa <- Stream.eval(HikariTransactor.newHikariTransactor[IO](
-        db.driver,
-        db.url,
-        db.user,
-        db.password))
+      xa <- Stream.eval(HikariTransactor.newHikariTransactor[IO](db.driver, db.url, db.user, db.password))
       exitCode <- BlazeBuilder[IO]
         .bindHttp(conf.server.port, conf.server.host)
         .mountService(TodoService(TodoRepository(xa, db.schema)).instance, "/api/v1")
