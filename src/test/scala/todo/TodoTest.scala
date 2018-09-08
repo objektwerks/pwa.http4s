@@ -52,12 +52,12 @@ class TodoTest extends FunSuite with BeforeAndAfterAll {
   test("put") {
     val todo = get.head
     val completedTodo = todo.copy(completed = Some(Timestamp.from(Instant.now)))
-    assert(put(completedTodo).id == 1)
+    assert(put(completedTodo).count == 1)
   }
 
   test("delete") {
     val todo = get.head
-    assert(delete(todo.id).id == 1)
+    assert(delete(todo.id).count == 1)
     assert(get.isEmpty)
     assert(post(Todo(task = "drink beer")).id == 2)
   }
