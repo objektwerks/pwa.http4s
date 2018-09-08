@@ -3,6 +3,8 @@ PWA Http4s App
 >Progressive web app ( PWA ) with an Http4s server. See ( https://github.com/objektwerks/pwa )
 for more details on PWA.
 
+**Note: The PWA client is not yet connected to the server!**
+
 Test Server
 -----------
 1. sbt clean test
