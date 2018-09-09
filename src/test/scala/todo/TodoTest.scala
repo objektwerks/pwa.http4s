@@ -21,43 +21,36 @@ import todo.TodoConfig.Config
 class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
   import Todo._
 
-  val server = for {
-    conf <- loadConfig[Config](ConfigFactory.load("test.conf"))
-    db = conf.database
-    xa = Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
-    repo = TodoRepository(xa, db.schema)
-    io = BlazeBuilder[IO]
-      .bindHttp(conf.server.port)
-      .mountService(TodoService(repo).instance, "/api/v1")
-      .start
-      .unsafeRunSync
-  } yield {
-    check(repo.selectTodos)
-    check(repo.insertTodo)
-    check(repo.updateTodo)
-    check(repo.deleteTodo)
-    io
-  }
+  val conf = loadConfig[Config](ConfigFactory.load("test.conf")).toOption.get
+  val db = conf.database
+  val xa = Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
+  val repository = TodoRepository(xa, db.schema)
+  val server = BlazeBuilder[IO]
+    .bindHttp(conf.server.port)
+    .mountService(TodoService(repository).instance, "/api/v1")
+    .start
+    .unsafeRunSync
   val client = Http1Client[IO]().unsafeRunSync
   val todosUri = uri("http://localhost:7979/api/v1/todos")
 
-  override protected def afterAll(): Unit = {
-    server.map(s => s.shutdownNow)
-    client.shutdownNow
-  }
+  override def transactor: Transactor[IO] = xa
 
-  override def transactor: Transactor[IO] = {
-    val xa = for {
-      conf <- loadConfig[Config](ConfigFactory.load("test.conf"))
-      db = conf.database
-    } yield Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
-    xa.toOption.get
+  override protected def afterAll(): Unit = {
+    server.shutdownNow
+    client.shutdownNow
   }
 
   test("post") {
     val todo = Todo(task = "buy beer")
     val inserted = post(todo)
     assert(inserted.id == 1)
+  }
+
+  test("check") {
+    check(repository.selectTodos)
+    check(repository.insertTodo)
+    check(repository.updateTodo)
+    check(repository.deleteTodo)
   }
 
   test("get") {
