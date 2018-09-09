@@ -11,7 +11,6 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 import org.http4s.circe._
 import org.http4s.client.blaze.Http1Client
-import org.http4s.dsl.io.uri
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.{Method, Request, Uri}
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
@@ -24,14 +23,13 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
   val conf = loadConfig[Config](ConfigFactory.load("test.conf")).toOption.get
   val db = conf.database
   val xa = Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
-  val repository = TodoRepository(xa, db.schema)
   val server = BlazeBuilder[IO]
     .bindHttp(conf.server.port, conf.server.host)
-    .mountService(TodoService(repository).instance, "/api/v1")
+    .mountService(TodoService(TodoRepository(xa, db.schema)).instance, "/api/v1")
     .start
     .unsafeRunSync
   val client = Http1Client[IO]().unsafeRunSync
-  val todosUri = uri("http://localhost:7979/api/v1/todos")
+  val todosUri = Uri.unsafeFromString("http://localhost:7979/api/v1/todos")
 
   override def transactor: Transactor[IO] = xa
 
@@ -47,10 +45,12 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
   }
 
   test("check") {
-    check(repository.selectTodos)
-    check(repository.insertTodo)
-    check(repository.updateTodo)
-    check(repository.deleteTodo)
+    import TodoRepository._
+
+    check(selectTodos)
+    check(insertTodo)
+    check(updateTodo)
+    check(deleteTodo)
   }
 
   test("get") {
