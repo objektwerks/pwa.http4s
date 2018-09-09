@@ -38,12 +38,6 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
     client.shutdownNow
   }
 
-  test("post") {
-    val todo = Todo(task = "buy beer")
-    val inserted = post(todo)
-    assert(inserted.id == 1)
-  }
-
   test("check") {
     import TodoRepository._
 
@@ -53,6 +47,12 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
     check(deleteTodo)
   }
 
+  test("post") {
+    val todo = Todo(task = "buy beer")
+    val inserted = post(todo)
+    assert(inserted.id == 1)
+  }
+
   test("get") {
     val todos = get
     assert(todos.length == 1)
@@ -60,12 +60,19 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
 
   test("put") {
     val todo = get.head
+    println(todo)
+    println(todo.asJson)
     val completedTodo = todo.copy(completed = Some(Timestamp.from(Instant.now)))
     assert(put(completedTodo).count == 1)
   }
 
   test("delete") {
-    val todo = get.head
+    val todos = get
+    val todo = todos.head
+    println(todo)
+    println(todo.asJson)
+    println(todos)
+    println(todos.asJson)
     assert(delete(todo.id).count == 1)
     assert(get.isEmpty)
     assert(post(Todo(task = "drink beer")).id == 2)
