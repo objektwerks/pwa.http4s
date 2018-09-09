@@ -3,7 +3,16 @@ PWA Http4s App
 >Progressive web app ( PWA ) with an Http4s server. See ( https://github.com/objektwerks/pwa )
 for more details on PWA.
 
-**Note: The PWA client is not yet connected to the server!**
+Todo
+----
+1. build UI todo list
+2. connect UI to server
+
+Install
+-------
+1. cd pwa
+2. npm install -g live-server ( https://www.npmjs.com/package/live-server )
+3. npm install ( in project root directory to init node_modules directory via package.json )
 
 Test Server
 -----------
@@ -15,8 +24,14 @@ Run Server
 
 Run PWA
 -------
-1. live-server ( in root directory )
-2. view http://127.0.0.1:8080 in default browser ( which will open immediately )
+1. cd pwa
+2. live-server --port=7777
+3. view http://127.0.0.1:7777 ( which will open immediately in default browser )
+4. select developer tools via browser
+5. view app via developer tools menu
+6. optionally select audits menu -> run audit ( lighthouse tests )
+
+Edits to assests hosted by live-server are reflected automatically in the browser.
 
 Build PWA
 ---------
