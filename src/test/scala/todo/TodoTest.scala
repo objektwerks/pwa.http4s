@@ -26,7 +26,7 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
   val xa = Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
   val repository = TodoRepository(xa, db.schema)
   val server = BlazeBuilder[IO]
-    .bindHttp(conf.server.port)
+    .bindHttp(conf.server.port, conf.server.host)
     .mountService(TodoService(repository).instance, "/api/v1")
     .start
     .unsafeRunSync
