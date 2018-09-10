@@ -11,6 +11,7 @@ import scala.io.Source
 import scala.util.Try
 
 class TodoRepository(xa: Transactor[IO], schema: String) {
+
   import TodoRepository._
 
   Try(select.length) recover { case _ => init(schema) }
@@ -30,8 +31,9 @@ class TodoRepository(xa: Transactor[IO], schema: String) {
     Updated(updateTodo.toUpdate0((todo.task, todo.completed, todo.id))
       .run.transact(xa).unsafeRunSync)
 
-  def delete(id: Int): Deleted = Deleted(deleteTodo.toUpdate0(id)
-    .run.transact(xa).unsafeRunSync)
+  def delete(id: Int): Deleted =
+    Deleted(deleteTodo.toUpdate0(id)
+      .run.transact(xa).unsafeRunSync)
 }
 
 object TodoRepository {
