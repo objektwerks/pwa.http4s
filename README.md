@@ -25,11 +25,10 @@ Run Server
 Run PWA
 -------
 1. cd pwa
-2. live-server
-3. view http://127.0.0.1:8080 ( which will open immediately in default browser )
-4. select developer tools via browser
-5. view app via developer tools menu
-6. optionally select audits menu -> run audit ( lighthouse tests )
+2. live-server ( http://127.0.0.1:8080 )
+3. select developer tools via browser
+4. view app via developer tools menu
+5. optionally select audits menu -> run audit ( lighthouse tests )
 
 Edits to assests hosted by live-server are reflected automatically in the browser.
 
