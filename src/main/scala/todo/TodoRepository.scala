@@ -22,20 +22,16 @@ class TodoRepository(xa: Transactor[IO], schema: String) {
 
   def select: List[Todo] = selectTodos.to[List].transact(xa).unsafeRunSync
 
-  def insert(todo: Todo): Inserted = {
-    val insert = for {
-      id <- insertTodo.toUpdate0((todo.task, todo.assigned, todo.completed)).withUniqueGeneratedKeys[Int]("id")
-    } yield id
-    Inserted(insert.transact(xa).unsafeRunSync)
-  }
+  def insert(todo: Todo): Inserted =
+    Inserted(insertTodo.toUpdate0((todo.task, todo.assigned, todo.completed))
+      .withUniqueGeneratedKeys[Int]("id").transact(xa).unsafeRunSync)
 
-  def update(todo: Todo): Updated = {
-    Updated(updateTodo.toUpdate0((todo.task, todo.completed, todo.id)).run.transact(xa).unsafeRunSync)
-  }
+  def update(todo: Todo): Updated =
+    Updated(updateTodo.toUpdate0((todo.task, todo.completed, todo.id))
+      .run.transact(xa).unsafeRunSync)
 
-  def delete(id: Int): Deleted = {
-    Deleted(deleteTodo.toUpdate0(id).run.transact(xa).unsafeRunSync)
-  }
+  def delete(id: Int): Deleted = Deleted(deleteTodo.toUpdate0(id)
+    .run.transact(xa).unsafeRunSync)
 }
 
 object TodoRepository {
