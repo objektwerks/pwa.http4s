@@ -5,8 +5,8 @@ for more details on PWA.
 
 Todo
 ----
-1. build UI todo list
-2. connect UI to server
+1. connect UI to server
+2. implement UI event handlers
 
 Install
 -------
