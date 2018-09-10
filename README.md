@@ -20,13 +20,13 @@ Test Server
 
 Run Server
 ----------
-1. sbt run
+1. sbt run ( http://127.0.0.1:7777 )
 
 Run PWA
 -------
 1. cd pwa
-2. live-server --port=7777
-3. view http://127.0.0.1:7777 ( which will open immediately in default browser )
+2. live-server
+3. view http://127.0.0.1:8080 ( which will open immediately in default browser )
 4. select developer tools via browser
 5. view app via developer tools menu
 6. optionally select audits menu -> run audit ( lighthouse tests )
