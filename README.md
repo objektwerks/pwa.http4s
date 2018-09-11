@@ -5,8 +5,8 @@ for more details on PWA.
 
 Todo
 ----
-1. connect UI to server
-2. implement UI event handlers
+1. load todos to list - via server get
+2. add todo event handlers - load, select, add, save and delete
 
 Install
 -------
