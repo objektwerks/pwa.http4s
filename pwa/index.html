@@ -20,28 +20,39 @@
     </head>
     <body>
         <img src="logo.png" alt="Todo">
-        <hr/>
-        <div class="w3-container">
-            <table id="todos" class="w3-table w3-bordered w3-hoverable">
-                <tr class="3-indigo">
-                    <th>Todo</th>
-                    <th>Assigned</th>
-                    <th>Completed</th>
-                </tr>
-                <tr>
-                    <td>Buy Beer</td>
-                    <td>2018.9.11</td>
-                    <td></td>
-                </tr>
-            </table>
+        <div class="w3-container w3-indigo">
+            <h3>Todo</h3>
         </div>
-        <div>
-            <div class="w3-container">
-                <form class="w3-container">
-                    <p><input id="new-todo" class="w3-input w3-input w3-hover-light-gray" type="text"></p>
-                    <p><button class="w3-circle w3-white w3-hover-light-gray">+</button></p>
-                </form>
+        <div class="w3-container">
+            <p>
+                <input id="todo" class="w3-input w3-hover-light-gray" type="text">
+                <label>Todo</label>
+            </p>
+            <p>
+                <input id="assigned" class="w3-input w3-hover-light-gray" type="date">
+                <label>Assigned</label>
+            </p>
+            <p>
+                <input id="completed" class="w3-input w3-input w3-hover-light-gray" type="date">
+                <label>Completed</label>
+            </p>
+            <div class="w3-container" style="padding-bottom: 12px">
+                <div class="w3-bar">
+                    <button class="w3-button w3-white w3-border w3-hover-light-gray">Add</button>
+                    <button class="w3-button w3-white w3-border w3-hover-light-gray">Save</button>
+                    <button class="w3-button w3-white w3-border w3-hover-light-gray">Delete</button>
+                </div>
             </div>
+        </div>
+        <div class="w3-container w3-indigo">
+            <h3>Todos</h3>
+        </div>
+        <div class="w3-container">
+            <ul class="w3-ul w3-hoverable">
+                <li class="w3-hover-light-gray">Wash car.</li>
+                <li class="w3-hover-light-gray">Clean pool.</li>
+                <li class="w3-hover-light-gray">Mow yard.</li>
+            </ul>
         </div>
         <hr/>
         <script type="module" src="main.js"></script>
