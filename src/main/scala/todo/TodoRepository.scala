@@ -24,11 +24,11 @@ class TodoRepository(xa: Transactor[IO], schema: String) {
   def select: List[Todo] = selectTodos.to[List].transact(xa).unsafeRunSync
 
   def insert(todo: Todo): Inserted =
-    Inserted(insertTodo.toUpdate0((todo.task, todo.assigned, todo.completed))
+    Inserted(insertTodo.toUpdate0((todo.task, todo.opened, todo.closed))
       .withUniqueGeneratedKeys[Int]("id").transact(xa).unsafeRunSync)
 
   def update(todo: Todo): Updated =
-    Updated(updateTodo.toUpdate0((todo.task, todo.completed, todo.id))
+    Updated(updateTodo.toUpdate0((todo.task, todo.closed, todo.id))
       .run.transact(xa).unsafeRunSync)
 
   def delete(id: Int): Deleted =
@@ -37,9 +37,9 @@ class TodoRepository(xa: Transactor[IO], schema: String) {
 }
 
 object TodoRepository {
-  val selectTodos = sql"select * from todo order by assigned desc".query[Todo]
-  val insertTodo = Update[(String, Timestamp, Option[Timestamp])]("insert into todo(task, assigned, completed) values (?, ?, ?)")
-  val updateTodo = Update[(String, Option[Timestamp], Int)]("update todo set task = ?, completed = ? where id = ?")
+  val selectTodos = sql"select * from todo order by opened desc".query[Todo]
+  val insertTodo = Update[(String, Timestamp, Option[Timestamp])]("insert into todo(task, opened, closed) values (?, ?, ?)")
+  val updateTodo = Update[(String, Option[Timestamp], Int)]("update todo set task = ?, closed = ? where id = ?")
   val deleteTodo = Update[Int]("delete from todo where id = ?")
 
   def apply(xa: Transactor[IO], schema: String): TodoRepository = new TodoRepository(xa, schema)

@@ -25,28 +25,13 @@
         </div>
         <div class="w3-container">
             <p>
-                <input id="todo-id" type="text" readonly/>
-                <label>Id</label>
+                <label>Opened:</label>
+                <input id="assigned" class="w3-input w3-hover-light-gray" type="text" readonly/>
             </p>
             <p>
-                <input id="todo" class="w3-input w3-hover-light-gray" type="text">
-                <label>Todo</label>
+                <label>Closed:</label>
+                <input id="completed" class="w3-input w3-input w3-hover-light-gray" type="datetime-local"/>
             </p>
-            <p>
-                <input id="assigned" class="w3-input w3-hover-light-gray" type="date">
-                <label>Assigned</label>
-            </p>
-            <p>
-                <input id="completed" class="w3-input w3-input w3-hover-light-gray" type="date">
-                <label>Completed</label>
-            </p>
-            <div class="w3-container" style="padding-bottom: 12px">
-                <div class="w3-bar">
-                    <button id="add-todo" class="w3-button w3-white w3-border w3-hover-light-gray">Add</button>
-                    <button id="save-todo" class="w3-button w3-white w3-border w3-hover-light-gray">Save</button>
-                    <button id="delete-todo" class="w3-button w3-white w3-border w3-hover-light-gray">Delete</button>
-                </div>
-            </div>
         </div>
         <div class="w3-container w3-indigo">
             <h3>Todos</h3>
@@ -57,6 +42,11 @@
                 <li class="w3-hover-light-gray">Clean pool.</li>
                 <li class="w3-hover-light-gray">Mow yard.</li>
             </ul>
+        </div>
+        <div class="w3-container" style="padding-top: 12px">
+            <div class="w3-bar">
+                <button id="new-todo" class="w3-button w3-white w3-border w3-hover-light-gray">New</button>
+            </div>
         </div>
         <hr/>
         <script type="module" src="main.js"></script>

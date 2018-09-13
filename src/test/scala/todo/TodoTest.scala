@@ -62,7 +62,7 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
     val todo = get.head
     println(todo)
     println(todo.asJson)
-    val completedTodo = todo.copy(completed = Some(Timestamp.from(Instant.now)))
+    val completedTodo = todo.copy(closed = Some(Timestamp.from(Instant.now)))
     assert(put(completedTodo).count == 1)
   }
 
