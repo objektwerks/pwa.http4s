@@ -6,8 +6,8 @@ for more details on PWA.
 Todo
 ----
 1. get todos
-2. add todo event handlers - select, add, save and delete
-3. post, put and delete todos
+2. add todo event handlers - select, close, new
+3. post, put todos
 
 Install
 -------

@@ -32,8 +32,4 @@ object Todo {
   case class Updated(count: Int)
   implicit val updatedDecoder = jsonOf[IO, Updated]
   implicit val updatedEncoder = jsonEncoderOf[IO, Updated]
-
-  case class Deleted(count: Int)
-  implicit val deletedDecoder = jsonOf[IO, Deleted]
-  implicit val deletedEncoder = jsonEncoderOf[IO, Deleted]
 }
