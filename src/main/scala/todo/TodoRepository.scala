@@ -11,7 +11,6 @@ import scala.io.Source
 import scala.util.Try
 
 class TodoRepository(xa: Transactor[IO], schema: String) {
-
   import TodoRepository._
 
   Try(select.length) recover { case _ => init(schema) }
