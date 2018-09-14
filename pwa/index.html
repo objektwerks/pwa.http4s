@@ -23,19 +23,19 @@
         <div class="w3-container w3-indigo">
             <h3>Todo</h3>
         </div>
-        <div class="w3-container">
-            <p>
-                <label>Opened:</label>
-                <input id="opened" class="w3-input w3-hover-light-gray" type="text" readonly/>
-            </p>
-            <p>
-                <label>Closed:</label>
-                <input id="closed" class="w3-input w3-input w3-hover-light-gray" type="datetime-local"/>
-            </p>
-            <p>
-                <label>Todo:</label>
-                <input id="todo" class="w3-input w3-input w3-hover-light-gray" type="text"/>
-            </p>
+        <div class="w3-container" style="padding-top: 10px">
+            <div class="w3-row">
+                <div class="w3-col" style="width:20%"><label>Opened</label></div>
+                <div class="w3-col" style="width:80%"><input id="opened" class="w3-input w3-hover-light-gray" type="text" readonly/></div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-col" style="width:20%"><label>Closed</label></div>
+                <div class="w3-col" style="width:80%"><input id="closed" class="w3-input w3-input w3-hover-light-gray" type="datetime-local"/></div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-col" style="width:20%"><label>Todo</label></div>
+                <div class="w3-col" style="width:80%"><input id="todo" class="w3-input w3-input w3-hover-light-gray" type="text"/></div>
+            </div>
         </div>
         <div class="w3-container w3-indigo">
             <h3>Todos</h3>
@@ -53,7 +53,7 @@
                 </li>
             </ul>
         </div>
-        <div class="w3-container" style="padding-top: 12px">
+        <div class="w3-container" style="padding-top: 10px">
             <div class="w3-bar">
                 <button id="new-todo" class="w3-button w3-circle w3-white w3-border w3-hover-light-gray">+</button>
             </div>
