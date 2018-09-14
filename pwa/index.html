@@ -42,9 +42,15 @@
         </div>
         <div class="w3-container">
             <ul id="todo-list" class="w3-ul w3-hoverable">
-                <li id="1" class="w3-hover-light-gray">Wash car.</li>
-                <li id="2" class="w3-hover-light-gray">Clean pool.</li>
-                <li id="3" class="w3-hover-light-gray">Mow yard.</li>
+                <li id="1" class="w3-display-container w3-hover-light-gray">Wash car.
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-right">&times;</span>
+                </li>
+                <li id="2" class="w3-display-container w3-hover-light-gray">Clean pool.
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-right">&times;</span>
+                </li>
+                <li id="3" class="w3-display-container w3-hover-light-gray">Mow yard.
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-right">&times;</span>
+                </li>
             </ul>
         </div>
         <div class="w3-container" style="padding-top: 12px">
