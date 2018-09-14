@@ -14,9 +14,10 @@ const ASSETS = [
     'logo-341.png',
     'logo-384.png',
     'logo-512.png',
-    'cache.js',
     'index.js',
-    'main.js',
+    'registrar.js',
+    'model.js',
+    'cache.js',
     'service-worker.js'
 ];
 const SYNC = 'todo-sync';
