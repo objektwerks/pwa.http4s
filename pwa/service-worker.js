@@ -15,8 +15,8 @@ self.addEventListener('fetch', event => {
     console.warn('fetch: Bug [823392] cache === only-if-cached && mode !== same-orgin', event.request);
     return;
   }
-  console.log('fetch: calling dynamicCache...');
-  event.respondWith(dynamicCache(event.request));
+  console.log('fetch: calling fromCache...');
+  event.respondWith(fromCache(event.request));
 });
 
 self.addEventListener('sync', event => {

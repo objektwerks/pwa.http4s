@@ -1,7 +1,7 @@
 const CACHE = 'todo-cache';
 const ASSETS = [
+    '/',
     'index.html',
-    'offline.html',
     'style.css',
     'w3.4.10.css',
     'favicon.ico',
@@ -29,24 +29,14 @@ function preCache() {
     });
 }
 
-function dynamicCache(request) {
+function fromCache(request) {
     return caches.match(request).then(matching => {
         if (matching) {
-            console.log('dynamicCache: matched request.', request.url);
+            console.log('fromCache: matched request.', request.url);
             return matching;
         } else {
-            console.log('dynamicCache: match failed, fetching request...', request.url);
-            return fetch(request).then(response => {
-                return caches.open(CACHE).then(cache => {
-                    cache.put(request.url, response.clone());
-                    console.log('dynamicCache: dynamically cached asset.', request.url);
-                    return response;
-                }).
-                catch(error => {
-                    console.log('dynamicCache: failed! getting offline.html...', request.url, error);
-                    return caches.open(CACHE).then(cache => cache.match('/offline.html'));
-                });
-            });
+            console.log('fromCache: match failed.', request.url);
+            return Promise.resolve;
         }
     });
 }
