@@ -2,7 +2,7 @@ export default () => {
     const SYNC = 'todo-sync';
 
     navigator.serviceWorker.
-    register('./service-worker.js').
+    register('/service-worker.js').
     then(registration => console.log('main: service worker registered!', registration)).
     catch(error => console.error('main: failed to register service worker!', error));
 
