@@ -23,7 +23,7 @@ self.addEventListener('fetch', event => {
 
 self.addEventListener('sync', event => {
   if (event.tag === SYNC) {
-    console.log('sync: background syncing...');
+    console.log('sync: background syncing...', event);
     event.waitUntil(Promise.resolve);
   }
 });
