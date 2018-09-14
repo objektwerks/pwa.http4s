@@ -29,5 +29,5 @@ self.addEventListener('sync', event => {
 });
 
 self.addEventListener('message', event => {
-  console.log('message: received...', event, message);
+  console.log('message: received...', event);
 });
