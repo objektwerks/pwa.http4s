@@ -11,10 +11,6 @@ export default () => {
         console.log('todo-list: click...', event.target.id, event.target.textContent);
     });
 
-    document.getElementById('todo-opened').addEventListener('change', event => {
-        console.log('todo-opened: onchange...', event.target.value);
-    });
-
     document.getElementById('todo-closed').addEventListener('change', event => {
         console.log('todo-closed: onchange...', event.target.value);
     });
