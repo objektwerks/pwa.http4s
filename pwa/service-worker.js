@@ -16,7 +16,9 @@ self.addEventListener('fetch', event => {
     return;
   }
   console.log('fetch: calling fromCache...');
-  event.respondWith(fromCache(event.request));
+  event.respondWith(fromCache(event.request).then(response => {
+    return response || fetch(event.request);
+  }));
 });
 
 self.addEventListener('sync', event => {

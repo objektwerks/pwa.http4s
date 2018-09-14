@@ -36,7 +36,7 @@ function fromCache(request) {
             return matching;
         } else {
             console.log('fromCache: match failed.', request.url);
-            return Promise.resolve;
+            return Promise.reject;
         }
     });
 }
