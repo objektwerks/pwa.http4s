@@ -13,14 +13,14 @@ import scala.util.Try
 class TodoRepository(xa: Transactor[IO], schema: String) {
   import TodoRepository._
 
-  Try(select.length) recover { case _ => init(schema) }
+  Try(select.size) recover { case _ => init(schema) }
 
   def init(schemaPath: String): Int = {
     val schema = Source.fromInputStream(getClass.getResourceAsStream(schemaPath)).mkString
     Fragment.const(schema).update.run.transact(xa).unsafeRunSync
   }
 
-  def select: List[Todo] = selectTodos.to[List].transact(xa).unsafeRunSync
+  def select: Map[Int, Todo] = selectTodos.to[List].transact(xa).unsafeRunSync.map(todo => (todo.id, todo)).toMap
 
   def insert(todo: Todo): Inserted =
     Inserted(insertTodo.toUpdate0((todo.task, todo.opened, todo.closed))
