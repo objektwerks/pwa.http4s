@@ -1,8 +1,4 @@
 export default () => {
-    const model = new Map();
-
-    console.log('model:', model);
-
     document.getElementById('add-todo').addEventListener('click', event => {
         console.log('add-todo: click...', event);
     });
@@ -13,5 +9,17 @@ export default () => {
 
     document.getElementById('todo-list').addEventListener('click', event => {
         console.log('todo-list: click...', event.target.id, event.target.textContent);
+    });
+
+    document.getElementById('todo-opened').addEventListener('change', event => {
+        console.log('todo-opened: onchange...', event.target.value);
+    });
+
+    document.getElementById('todo-closed').addEventListener('change', event => {
+        console.log('todo-closed: onchange...', event.target.value);
+    });
+
+    document.getElementById('todo').addEventListener('change', event => {
+        console.log('todo: onchange...', event.target.value);
     });
 };
