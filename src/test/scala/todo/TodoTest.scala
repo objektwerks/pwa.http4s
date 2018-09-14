@@ -44,6 +44,7 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
     check(selectTodos)
     check(insertTodo)
     check(updateTodo)
+    check(deleteTodo)
   }
 
   test("post") {
