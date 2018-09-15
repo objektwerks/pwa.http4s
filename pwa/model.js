@@ -21,6 +21,21 @@ export default () => {
         li.setAttribute('class', 'w3-hover-light-gray')
         ul.appendChild(li);
     }
+
+    function clearTodoFields() {
+        document.getElementById('todo-id').value = "";
+        document.getElementById('todo-opened').value = "";
+        document.getElementById('todo-closed').value = "";
+        document.getElementById('todo').value = "";
+    }
+
+    function setTodoFields(id) {
+        let todo = todos.get(i);
+        document.getElementById('todo-id').value = todo.id;
+        document.getElementById('todo-opened').value = todo.opened;
+        document.getElementById('todo-closed').value = todo.closed;
+        document.getElementById('todo').value = todo.todo;
+    }
     
     document.getElementById('add-todo').addEventListener('click', event => {
         console.log('add-todo: click...', event);
@@ -32,13 +47,18 @@ export default () => {
 
     document.getElementById('todo-list').addEventListener('click', event => {
         console.log('todo-list: click...', event.target.id, event.target.textContent);
+        setTodoFields(event.target.id);
     });
 
     document.getElementById('todo-closed').addEventListener('change', event => {
         console.log('todo-closed: onchange...', event.target.value);
+        let id = document.getElementById('todo-id').value
+        todos.get(id).closed = event.target.value;
     });
 
     document.getElementById('todo').addEventListener('change', event => {
         console.log('todo: onchange...', event.target.value);
-    });
+        let id = document.getElementById('todo-id').value
+        todos.get(id).todo = event.target.value;
+   });
 };
