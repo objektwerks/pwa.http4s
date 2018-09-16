@@ -30,7 +30,7 @@ export default () => {
     }
 
     function setTodoFields(id) {
-        let todo = todos.get(i);
+        let todo = todos.get(id);
         document.getElementById('todo-id').value = todo.id;
         document.getElementById('todo-opened').value = todo.opened;
         document.getElementById('todo-closed').value = todo.closed;
