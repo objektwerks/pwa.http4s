@@ -8,12 +8,14 @@ export default () => {
         } 
      }
 
-    let todos = new Map(); // Temporary Http fetch.
+    let todos = new Map(); // Temporary.
 
-    todos.set(1, new Todo(1, 'Wash car.'));
-    todos.set(2, new Todo(2, 'Dry car.'));
-    todos.set(3, new Todo(3, 'Wax car.'));
+    todos
+    .set(1, new Todo(1, 'Wash car.'))
+    .set(2, new Todo(2, 'Dry car.'))
+    .set(3, new Todo(3, 'Wax car.'));
     let ul = document.getElementById('todo-list');
+    ul.innerHTML = '';
     for (let [id, todo] of todos) {
         let li = document.createElement('li');
         li.appendChild(document.createTextNode(todo.todo));
@@ -30,24 +32,27 @@ export default () => {
     }
 
     function setTodoFields(id) {
+        console.log('id:', id);
+        console.log('todos:', todos);
         let todo = todos.get(id);
+        console.log('todo:', todo)
         document.getElementById('todo-id').value = todo.id;
         document.getElementById('todo-opened').value = todo.opened;
         document.getElementById('todo-closed').value = todo.closed;
         document.getElementById('todo').value = todo.todo;
     }
     
+    document.getElementById('todo-list').addEventListener('click', event => {
+        console.log('todo-list: click...', event.target.id, event.target.textContent);
+        setTodoFields(event.target.id);
+    });
+
     document.getElementById('add-todo').addEventListener('click', event => {
         console.log('add-todo: click...', event);
     });
 
     document.getElementById('remove-todo').addEventListener('click', event => {
         console.log('remove-todo: click...', event);
-    });
-
-    document.getElementById('todo-list').addEventListener('click', event => {
-        console.log('todo-list: click...', event.target.id, event.target.textContent);
-        setTodoFields(event.target.id);
     });
 
     document.getElementById('todo-closed').addEventListener('change', event => {
