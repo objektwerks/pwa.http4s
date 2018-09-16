@@ -1,6 +1,6 @@
 export default () => {
     class Todo { 
-        constructor(id, todo, opened = new Date().getTime, closed = 0) { 
+        constructor(id, todo, opened = new Date().toISOString(), closed = "") {
            this.id = id; 
            this.todo = todo;
            this.opened = opened;
@@ -8,12 +8,9 @@ export default () => {
         } 
      }
 
-    let todos = new Map(); // Temporary.
+    let todos = new Map(); // Temporary!
+    todos.set('1', new Todo(1, 'Wash car.'))
 
-    todos
-    .set(1, new Todo(1, 'Wash car.'))
-    .set(2, new Todo(2, 'Dry car.'))
-    .set(3, new Todo(3, 'Wax car.'));
     let ul = document.getElementById('todo-list');
     ul.innerHTML = '';
     for (let [id, todo] of todos) {
@@ -32,10 +29,7 @@ export default () => {
     }
 
     function setTodoFields(id) {
-        console.log('id:', id);
-        console.log('todos:', todos);
         let todo = todos.get(id);
-        console.log('todo:', todo)
         document.getElementById('todo-id').value = todo.id;
         document.getElementById('todo-opened').value = todo.opened;
         document.getElementById('todo-closed').value = todo.closed;
@@ -44,6 +38,7 @@ export default () => {
     
     document.getElementById('todo-list').addEventListener('click', event => {
         console.log('todo-list: click...', event.target.id, event.target.textContent);
+        document.getElementById('remove-todo').disabled = false;
         setTodoFields(event.target.id);
     });
 
