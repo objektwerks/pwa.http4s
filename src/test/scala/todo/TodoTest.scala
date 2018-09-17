@@ -55,24 +55,24 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
 
   test("get") {
     val todos = get
-    assert(todos.size == 1)
+    assert(todos.length == 1)
   }
 
   test("put") {
-    val (id, todo) = get.head
-    assert(id == 1)
+    val todo = get.head
+    assert(todo.id == 1)
     val completedTodo = todo.copy(closed = Some(Timestamp.from(Instant.now)))
     assert(put(completedTodo).count == 1)
   }
 
   test("delete") {
     val todos = get
-    val (id, todo) = todos.head
+    val todo = todos.head
     println(todo)
     println(todo.asJson)
     println(todos)
     println(todos.asJson)
-    assert(delete(id).count == 1)
+    assert(delete(todo.id).count == 1)
     assert(get.isEmpty)
     assert(post(Todo(task = "drink beer")).id == 2)
   }
@@ -82,9 +82,9 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
     client.expect[Inserted](post).unsafeRunSync
   }
 
-  def get: Map[Int, Todo] = {
+  def get: List[Todo] = {
     val get = Request[IO](Method.GET, todosUri)
-    client.expect[Map[Int, Todo]](get).unsafeRunSync
+    client.expect[List[Todo]](get).unsafeRunSync
   }
 
   def put(todo: Todo): Updated = {

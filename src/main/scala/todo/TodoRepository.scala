@@ -20,7 +20,7 @@ class TodoRepository(xa: Transactor[IO], schema: String) {
     Fragment.const(schema).update.run.transact(xa).unsafeRunSync
   }
 
-  def select: Map[Int, Todo] = selectTodos.to[List].transact(xa).unsafeRunSync.map(todo => (todo.id, todo)).toMap
+  def select: List[Todo] = selectTodos.to[List].transact(xa).unsafeRunSync
 
   def insert(todo: Todo): Inserted =
     Inserted(insertTodo.toUpdate0((todo.task, todo.opened, todo.closed))
