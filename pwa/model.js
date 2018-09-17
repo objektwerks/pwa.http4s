@@ -7,8 +7,8 @@ class Todo {
     }
 }
 export default class Todos {
-    constructor() {
-        this.todos = new Map();
+    constructor(todos) {
+        this.todos = todos;
         this.todoList = document.getElementById("todo-list");
         this.addTodo = document.getElementById("add-todo");
         this.removeTodo = document.getElementById("remove-todo");
