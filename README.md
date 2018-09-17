@@ -5,9 +5,7 @@ for more details on PWA.
 
 Todo
 ----
-1. get todos
-2. add todo event handlers - select, change, new, delete
-3. post, put, delete todos
+1. todos rest client - get, post, put, delete
 
 Install
 -------
