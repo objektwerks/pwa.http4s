@@ -1,4 +1,4 @@
 import registrar from './registrar.js';
-import Todos from './model.js';
+import Model from './model.js';
 registrar();
-const todos = new Todos(new Map());
+const model = new Model();

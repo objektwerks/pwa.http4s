@@ -6,9 +6,9 @@ class Todo {
         this.closed = "";
     }
 }
-export default class Todos {
-    constructor(todos) {
-        this.todos = todos;
+export default class Model {
+    constructor() {
+        this.todos = new Map();
         this.todoList = document.getElementById("todo-list");
         this.addTodo = document.getElementById("add-todo");
         this.removeTodo = document.getElementById("remove-todo");
