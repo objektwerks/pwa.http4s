@@ -49,6 +49,11 @@ export default class Model {
         });
     }
 
+    setModel(todos) {
+        this.todos = todos;
+        this.setTodoList();
+    }
+
     setTodoList() {
         this.todoList.innerHTML = "";
         for (let [id, todo] of this.todos) {
