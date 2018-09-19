@@ -33,7 +33,6 @@ export default class Model {
         this.removeTodo.addEventListener("click", event => {
             console.log("remove-todo: click...", event);
             this.todos.delete(getSelectedTodo().id);
-            this.clearTodoFields();
             this.setTodoList();
             this.isRemoveTodoDisabled(true);
         });
@@ -55,6 +54,7 @@ export default class Model {
     }
 
     setTodoList() {
+        this.clearTodoFields();
         this.todoList.innerHTML = "";
         for (let [id, todo] of this.todos) {
             let li = document.createElement("li");
