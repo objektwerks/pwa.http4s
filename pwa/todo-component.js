@@ -1,6 +1,7 @@
 export default class TodoComponent {
     constructor() {
-        this.todos = new Todos();
+        this.todoService = new TodoService();
+        this.todoModel = new TodoModel(this.todoService);
     }
 }
 
@@ -13,10 +14,13 @@ class Todo {
     }
 }
 
-class Todos {
-    constructor() {
-        this.todos = new Map();
+class TodoModel {
+    constructor(todoService) {
+        this.todoService = todoService;
+        this.todos = this.todoService.getTodos;
         this.todoList = document.getElementById("todo-list");
+        this.setTodoList();
+
         this.addTodo = document.getElementById("add-todo");
         this.removeTodo = document.getElementById("remove-todo");
         this.todoId = document.getElementById("todo-id");
@@ -34,32 +38,35 @@ class Todos {
             console.log("add-todo: click...", event);
             let text = prompt("Todo:", "Please, enter a todo.");
             if (text !== null && text.length > 0) {
-                this.todos.set(this.todos.size + 1 + "", new Todo(text));
+                let todo = new Todo(text);
+                this.todos.set(this.todos.size + 1 + "", todo);
                 this.setTodoList();
+                this.todoService.postTodo(todo);
             }
         });
 
         this.removeTodo.addEventListener("click", event => {
             console.log("remove-todo: click...", event);
-            this.todos.delete(getSelectedTodo().id);
+            let todo = this.getSelectedTodo();
+            this.todos.delete(todo.id);
             this.setTodoList();
             this.isRemoveTodoDisabled(true);
+            this.todoService.deleteTodo(todo);
         });
 
         this.todoClosed.addEventListener("change", event => {
             console.log("todo-closed: onchange...", event.target.value);
-            this.getSelectedTodo().closed = event.target.value;
+            let todo = this.getSelectedTodo();
+            todo.closed = event.target.value;
+            this.todoService.putTodo(todo);
         });
 
         this.todoText.addEventListener("change", event => {
             console.log("todo: onchange...", event.target.value);
-            this.getSelectedTodo().text = event.target.value;
+            let todo = this.getSelectedTodo();
+            todo.text = event.target.value;
+            this.todoService.putTodo(todo);
         });
-    }
-
-    setModel(todos) {
-        this.todos = todos;
-        this.setTodoList();
     }
 
     setTodoList() {
@@ -95,5 +102,27 @@ class Todos {
         this.todoOpened.value = "";
         this.todoClosed.value = "";
         this.todoText.value = "";
+    }
+}
+
+class TodoService {
+    constructor() {
+
+    }
+
+    getTodos() {
+        new Map();
+    }
+
+    postTodo(todo) {
+
+    }
+
+    putTodo(todo) {
+
+    }
+
+    deleteTodo(todo) {
+
     }
 }
