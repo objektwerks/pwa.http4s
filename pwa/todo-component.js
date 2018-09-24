@@ -33,8 +33,10 @@ class Todos {
         this.addTodo.addEventListener("click", event => {
             console.log("add-todo: click...", event);
             let text = prompt("Todo:", "Please, enter a todo.");
-            this.todos.set(this.todos.size + 1 + "", new Todo(text));
-            this.setTodoList();
+            if (text !== null) {
+                this.todos.set(this.todos.size + 1 + "", new Todo(text));
+                this.setTodoList();
+            }
         });
 
         this.removeTodo.addEventListener("click", event => {
