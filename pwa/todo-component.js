@@ -1,3 +1,9 @@
+export default class TodoComponent {
+    constructor() {
+        this.todos = new Todos();
+    }
+}
+
 class Todo {
     constructor(text) {
         this.id = 0;
@@ -6,7 +12,8 @@ class Todo {
         this.closed = "";
     }
 }
-export default class Model {
+
+class Todos {
     constructor() {
         this.todos = new Map();
         this.todoList = document.getElementById("todo-list");

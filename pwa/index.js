@@ -1,4 +1,5 @@
-import registrar from './registrar.js';
-import Model from './model.js';
-registrar();
-const model = new Model();
+import registerServiceWorker from './service-worker-registrar.js';
+import TodoComponent from './todo-component.js';
+
+registerServiceWorker();
+const component = new TodoComponent();
