@@ -14,18 +14,15 @@ import org.http4s.client.blaze.Http1Client
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.{Method, Request, Uri}
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import pureconfig.loadConfig
-import todo.TodoConfig.Config
 
 class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
   import Todo._
 
-  val conf = loadConfig[Config](ConfigFactory.load("test.conf")).toOption.get
-  val db = conf.database
-  val xa = Transactor.fromDriverManager[IO](db.driver, db.url, db.user, db.password)
+  val conf = ConfigFactory.load("test.conf")
+  val xa = Transactor.fromDriverManager[IO](conf.getString("test.driver"), conf.getString("test.url"), conf.getString("test.user"), conf.getString("test.password"))
   val server = BlazeBuilder[IO]
-    .bindHttp(conf.server.port, conf.server.host)
-    .mountService(TodoService(TodoRepository(xa, db.schema)).instance, "/api/v1")
+    .bindHttp(conf.getInt("test.port"), conf.getString("test.host"))
+    .mountService(TodoService(TodoRepository(xa, conf.getString("test.schema"))).instance, "/api/v1")
     .start
     .unsafeRunSync
   val client = Http1Client[IO]().unsafeRunSync

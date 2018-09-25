@@ -2,17 +2,19 @@ package todo
 
 import cats.effect.IO
 import com.typesafe.config.ConfigFactory
-import pureconfig.error.ConfigReaderException
 import pureconfig._
+import pureconfig.error.ConfigReaderException
 
 object TodoConfig {
   case class ServerConfig(host: String, port: Int)
 
   case class DatabaseConfig(schema: String, driver: String, url: String, user: String, password: String)
 
-  case class Config(server: ServerConfig, database: DatabaseConfig)
+  case class CorsConfig(anyOrigin: Boolean, allowCredentials: Boolean, maxAge: Long)
 
-  def load(confFilePath: String = "todo.conf"): IO[Config] = {
+  case class Config(server: ServerConfig, database: DatabaseConfig, cors: CorsConfig)
+
+  def load(confFilePath: String): IO[Config] = {
     IO {
       loadConfig[Config](ConfigFactory.load(confFilePath))
     }.flatMap {
