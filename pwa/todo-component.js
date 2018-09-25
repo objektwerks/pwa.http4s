@@ -9,8 +9,8 @@ class Todo {
     constructor(text) {
         this.id = 0;
         this.text = text;
-        this.opened = new Date().toLocaleDateString();
-        this.closed = "";
+        this.opened = new Date().getTime;
+        this.closed = new Date().getTime;
     }
 }
 
@@ -43,7 +43,9 @@ class TodoModelView {
                 let todo = new Todo(text);
                 this.todos.set(this.todos.size + 1 + "", todo);
                 this.setTodoList();
-                this.todoService.postTodo(todo); // TODO
+                this.todoService.postTodo(todo).then(id => {
+                    if (id > 0) todo.id = id  // TODO for failed post!
+                });
             }
         });
 
@@ -53,21 +55,30 @@ class TodoModelView {
             this.todos.delete(todo.id);
             this.setTodoList();
             this.isRemoveTodoDisabled(true);
-            this.todoService.deleteTodo(todo); // TODO
+            this.todoService.deleteTodo(todo).then(count => {
+                if (count < 1)
+                    this.todos.set(this.todos.size + 1 + "", todo); // TODO for failed delete!
+            });
         });
 
         this.todoClosed.addEventListener("change", event => {
             console.log("todo-closed: onchange...", event.target.value);
             let todo = this.getSelectedTodo();
-            todo.closed = event.target.value;
-            this.todoService.putTodo(todo); // TODO
+            todo.closed = new Date(event.target.value).getTime;
+            this.todoService.putTodo(todo).then(count => {
+                if (count < 1)
+                    console.error('putTodo: todo.closed update failed!', count)  // TODO for failed put!
+            });
         });
 
         this.todoText.addEventListener("change", event => {
             console.log("todo: onchange...", event.target.value);
             let todo = this.getSelectedTodo();
             todo.text = event.target.value;
-            this.todoService.putTodo(todo); // TODO
+            this.todoService.putTodo(todo).then(count => {
+                if (count < 1)
+                    console.error('putTodo: todo.text update failed!', count)  // TODO for failed put!
+            });
         });
     }
 
@@ -94,8 +105,8 @@ class TodoModelView {
     setTodoFields(id) {
         let todo = this.todos.get(id);
         this.todoId.value = todo.id;
-        this.todoOpened.value = todo.opened;
-        this.todoClosed.value = todo.closed;
+        this.todoOpened.value = new Date(todo.opened).toLocaleDateString;
+        this.todoClosed.value = new Date(todo.closed).toLocaleDateString;
         this.todoText.value = todo.text;
     }
 
@@ -138,7 +149,7 @@ class TodoService {
                 return mapOfTodos;
             })
             .catch(error => {
-                console.error('getTodos: ', error.message);
+                console.error('getTodos:', error.message);
                 return mapOfTodos;
             });
     }
@@ -149,13 +160,13 @@ class TodoService {
             .then(response => {
                 return response.json();
             })
-            .then(todoId => {
-                console.log('postTodos:', JSON.stringify(todoId));
-                return todoId;
+            .then(Id => {
+                console.log('postTodo:', JSON.stringify(Id));
+                return JSON.parse(Id).id;
             })
             .catch(error => {
-                console.error('postTodo: ', error.message);
-                Promise.reject();
+                console.error('postTodo:', error.message);
+                0;
             });
     }
 
@@ -163,16 +174,15 @@ class TodoService {
         let init = Object.assign({body: JSON.stringify(todo)}, this.putInit);
         fetch(this.fetchUri, init)
             .then(response => {
-                if (response.ok) {
-                    Promise.resolve();
-                } else {
-                    console.error('postTodo: ', response.statusText);
-                    Promise.reject();
-                }
+                return response.json();
+            })
+            .then(Count => {
+                console.log('putTodo:', JSON.stringify(Count));
+                return JSON.parse(Count).count;
             })
             .catch(error => {
-                console.error('putTodo: ', error.message);
-                Promise.reject();
+                console.error('putTodo:', error.message);
+                0;
             });
     }
 
@@ -180,16 +190,15 @@ class TodoService {
         let uri = this.fetchUri + '/' + todo.id;
         fetch(uri, this.deleteInit)
             .then(response => {
-                if (response.ok) {
-                    Promise.resolve();
-                } else {
-                    console.error('postTodo: ', response.statusText);
-                    Promise.reject();
-                }
+                return response.json();
+            })
+            .then(Count => {
+                console.log('deleteodo:', JSON.stringify(Count));
+                return JSON.parse(Count).count;
             })
             .catch(error => {
                 console.error('deleteTodo: ', error.message);
-                Promise.reject();
+                0;
             });
     }
 }
