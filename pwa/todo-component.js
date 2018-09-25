@@ -119,9 +119,9 @@ class TodoModelView {
 }
 
 class TodoService {
-    constructor(fetchUri) {
-        this.fetchUri = fetchUri;
-        this.fetchInit = {
+    constructor(todosUri) {
+        this.todosUri = todosUri;
+        this.todosInit = {
             mode: "cors",
             cache: "no-cache",
             credentials: 'include',
@@ -129,15 +129,15 @@ class TodoService {
                 "Content-Type": "application/json; charset=utf-8",
             }
         }
-        this.getInit = Object.assign({method: "GET"}, this.fetchInit);
-        this.postInit = Object.assign({method: "POST"}, this.fetchInit);
-        this.putInit = Object.assign({method: "PUT"}, this.fetchInit);
-        this.deleteInit = Object.assign({method: "DELETE"}, this.fetchInit);
+        this.getTodosInit = Object.assign({method: "GET"}, this.todosInit);
+        this.postTodoInit = Object.assign({method: "POST"}, this.todosInit);
+        this.putTodoInit = Object.assign({method: "PUT"}, this.todosInit);
+        this.deleteTodoInit = Object.assign({method: "DELETE"}, this.todosInit);
     }
 
     getTodos() {
         let mapOfTodos = new Map();
-        fetch(this.fetchUri, this.getInit)
+        fetch(this.todosUri, this.getTodosInit)
             .then(response => {
                 return response.json();
             })
@@ -155,8 +155,8 @@ class TodoService {
     }
 
     postTodo(todo) {
-        let init = Object.assign({body: JSON.stringify(todo)}, this.postInit);
-        fetch(this.fetchUri, init)
+        let init = Object.assign({body: JSON.stringify(todo)}, this.postTodoInit);
+        fetch(this.todosUri, init)
             .then(response => {
                 return response.json();
             })
@@ -171,8 +171,8 @@ class TodoService {
     }
 
     putTodo(todo) {
-        let init = Object.assign({body: JSON.stringify(todo)}, this.putInit);
-        fetch(this.fetchUri, init)
+        let init = Object.assign({body: JSON.stringify(todo)}, this.putTodoInit);
+        fetch(this.todosUri, init)
             .then(response => {
                 return response.json();
             })
@@ -187,8 +187,8 @@ class TodoService {
     }
 
     deleteTodo(todo) {
-        let uri = this.fetchUri + '/' + todo.id;
-        fetch(uri, this.deleteInit)
+        let uri = this.todosUri + '/' + todo.id;
+        fetch(uri, this.deleteTodoInit)
             .then(response => {
                 return response.json();
             })
