@@ -5,7 +5,7 @@ import java.sql.Timestamp
 import cats.effect._
 import doobie._
 import doobie.implicits._
-import todo.Todo.{Deleted, Inserted, Updated}
+import todo.Todo.{Count, Id}
 
 import scala.io.Source
 import scala.util.Try
@@ -22,17 +22,13 @@ class TodoRepository(xa: Transactor[IO], schema: String) {
 
   def select: List[Todo] = selectTodos.to[List].transact(xa).unsafeRunSync
 
-  def insert(todo: Todo): Inserted =
-    Inserted(insertTodo.toUpdate0((todo.task, todo.opened, todo.closed))
-      .withUniqueGeneratedKeys[Int]("id").transact(xa).unsafeRunSync)
+  def insert(todo: Todo): Id = Id(insertTodo.toUpdate0((todo.task, todo.opened, todo.closed))
+                               .withUniqueGeneratedKeys[Int]("id").transact(xa).unsafeRunSync)
 
-  def update(todo: Todo): Updated =
-    Updated(updateTodo.toUpdate0((todo.task, todo.closed, todo.id))
-      .run.transact(xa).unsafeRunSync)
+  def update(todo: Todo): Count = Count(updateTodo.toUpdate0((todo.task, todo.closed, todo.id))
+                                  .run.transact(xa).unsafeRunSync)
 
-  def delete(id: Int): Deleted =
-    Deleted(deleteTodo.toUpdate0(id)
-      .run.transact(xa).unsafeRunSync)
+  def delete(id: Int): Count = Count(deleteTodo.toUpdate0(id).run.transact(xa).unsafeRunSync)
 }
 
 object TodoRepository {

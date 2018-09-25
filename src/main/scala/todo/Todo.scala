@@ -25,15 +25,11 @@ object Todo {
     override def apply(cursor: HCursor): Result[Timestamp] = Decoder.decodeLong.map(long => new Timestamp(long)).apply(cursor)
   }
 
-  case class Inserted(id: Int)
-  implicit val insertedDecoder = jsonOf[IO, Inserted]
-  implicit val insertedEncoder = jsonEncoderOf[IO, Inserted]
+  case class Id(id: Int)
+  implicit val idDecoder = jsonOf[IO, Id]
+  implicit val idEncoder = jsonEncoderOf[IO, Id]
 
-  case class Updated(count: Int)
-  implicit val updatedDecoder = jsonOf[IO, Updated]
-  implicit val updatedEncoder = jsonEncoderOf[IO, Updated]
-
-  case class Deleted(count: Int)
-  implicit val deletedDecoder = jsonOf[IO, Deleted]
-  implicit val deletedEncoder = jsonEncoderOf[IO, Deleted]
+  case class Count(count: Int)
+  implicit val countDecoder = jsonOf[IO, Count]
+  implicit val countEncoder = jsonEncoderOf[IO, Count]
 }

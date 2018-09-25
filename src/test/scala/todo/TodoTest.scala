@@ -49,8 +49,10 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
 
   test("post") {
     val todo = Todo(task = "buy beer")
-    val inserted = post(todo)
-    assert(inserted.id == 1)
+    val id = post(todo)
+    println(id)
+    println(id.asJson)
+    assert(id.id == 1)
   }
 
   test("get") {
@@ -72,14 +74,17 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
     println(todo.asJson)
     println(todos)
     println(todos.asJson)
-    assert(delete(todo.id).count == 1)
+    val count = delete(todo.id)
+    println(count)
+    println(count.asJson)
+    assert(count.count == 1)
     assert(get.isEmpty)
     assert(post(Todo(task = "drink beer")).id == 2)
   }
 
-  def post(todo: Todo): Inserted = {
+  def post(todo: Todo): Id = {
     val post = Request[IO](Method.POST, todosUri).withBody(todo.asJson)
-    client.expect[Inserted](post).unsafeRunSync
+    client.expect[Id](post).unsafeRunSync
   }
 
   def get: List[Todo] = {
@@ -87,14 +92,14 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
     client.expect[List[Todo]](get).unsafeRunSync
   }
 
-  def put(todo: Todo): Updated = {
+  def put(todo: Todo): Count = {
     val put = Request[IO](Method.PUT, todosUri).withBody(todo.asJson)
-    client.expect[Updated](put).unsafeRunSync
+    client.expect[Count](put).unsafeRunSync
   }
 
-  def delete(id: Int): Deleted = {
+  def delete(id: Int): Count = {
     val url = s"${todosUri.toString}/$id"
     val delete = Request[IO](Method.DELETE, Uri.unsafeFromString(url))
-    client.expect[Deleted](delete).unsafeRunSync
+    client.expect[Count](delete).unsafeRunSync
   }
 }
