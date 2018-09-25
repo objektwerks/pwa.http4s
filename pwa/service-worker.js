@@ -17,7 +17,8 @@ const ASSETS = [
     'index.js',
     'service-worker-registrar.js',
     'service-worker.js',
-    'todo-component.js'
+    'todo-service.js',
+    'todo-model-view.js'
 ];
 const SYNC = 'todo-sync';
 
