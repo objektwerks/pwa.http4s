@@ -69,6 +69,8 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
 
   test("delete") {
     val todos = get
+    println(todos)
+    println(todos.asJson)
     val todo = todos.head
     println(todo)
     println(todo.asJson)
