@@ -1,7 +1,7 @@
 export default class TodoComponent {
-    constructor() {
-        this.todoService = new TodoService();
-        this.todoModel = new TodoModel(this.todoService);
+    constructor(todosUri) {
+        this.todoService = new TodoService(todosUri);
+        this.todoModel = new TodoModelView(this.todoService);
     }
 }
 
@@ -14,10 +14,12 @@ class Todo {
     }
 }
 
-class TodoModel {
+class TodoModelView {
     constructor(todoService) {
         this.todoService = todoService;
-        this.todos = this.todoService.getTodos;
+        this.todoService.getTodos.then(mapOfTodos => {
+            this.todos = mapOfTodos;
+        });
         this.todoList = document.getElementById("todo-list");
         this.setTodoList();
 
@@ -41,7 +43,7 @@ class TodoModel {
                 let todo = new Todo(text);
                 this.todos.set(this.todos.size + 1 + "", todo);
                 this.setTodoList();
-                this.todoService.postTodo(todo);
+                this.todoService.postTodo(todo); // TODO
             }
         });
 
@@ -51,21 +53,21 @@ class TodoModel {
             this.todos.delete(todo.id);
             this.setTodoList();
             this.isRemoveTodoDisabled(true);
-            this.todoService.deleteTodo(todo);
+            this.todoService.deleteTodo(todo); // TODO
         });
 
         this.todoClosed.addEventListener("change", event => {
             console.log("todo-closed: onchange...", event.target.value);
             let todo = this.getSelectedTodo();
             todo.closed = event.target.value;
-            this.todoService.putTodo(todo);
+            this.todoService.putTodo(todo); // TODO
         });
 
         this.todoText.addEventListener("change", event => {
             console.log("todo: onchange...", event.target.value);
             let todo = this.getSelectedTodo();
             todo.text = event.target.value;
-            this.todoService.putTodo(todo);
+            this.todoService.putTodo(todo); // TODO
         });
     }
 
@@ -106,23 +108,88 @@ class TodoModel {
 }
 
 class TodoService {
-    constructor() {
-
+    constructor(fetchUri) {
+        this.fetchUri = fetchUri;
+        this.fetchInit = {
+            mode: "cors",
+            cache: "no-cache",
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            }
+        }
+        this.getInit = Object.assign({method: "GET"}, this.fetchInit);
+        this.postInit = Object.assign({method: "POST"}, this.fetchInit);
+        this.putInit = Object.assign({method: "PUT"}, this.fetchInit);
+        this.deleteInit = Object.assign({method: "DELETE"}, this.fetchInit);
     }
 
     getTodos() {
-        new Map();
+        let mapOfTodos = new Map();
+        fetch(this.fetchUri, this.getInit)
+            .then(response => {
+                return response.json();
+            })
+            .then(arrayOfTodos => {
+                console.log('getTodos:', JSON.stringify(arrayOfTodos));
+                for (let todo of arrayOfTodos) {
+                    mapOfTodos.set(mapOfTodos.size + 1, todo);
+                }
+                return mapOfTodos;
+            })
+            .catch(error => {
+                console.error('getTodos: ', error.message);
+                return mapOfTodos;
+            });
     }
 
     postTodo(todo) {
-
+        let init = Object.assign({body: JSON.stringify(todo)}, this.postInit);
+        fetch(this.fetchUri, init)
+            .then(response => {
+                return response.json();
+            })
+            .then(todoId => {
+                console.log('postTodos:', JSON.stringify(todoId));
+                return todoId;
+            })
+            .catch(error => {
+                console.error('postTodo: ', error.message);
+                Promise.reject();
+            });
     }
 
     putTodo(todo) {
-
+        let init = Object.assign({body: JSON.stringify(todo)}, this.putInit);
+        fetch(this.fetchUri, init)
+            .then(response => {
+                if (response.ok) {
+                    Promise.resolve();
+                } else {
+                    console.error('postTodo: ', response.statusText);
+                    Promise.reject();
+                }
+            })
+            .catch(error => {
+                console.error('putTodo: ', error.message);
+                Promise.reject();
+            });
     }
 
     deleteTodo(todo) {
-
+        let uri = this.fetchUri + '/' + todo.id;
+        fetch(uri, this.deleteInit)
+            .then(response => {
+                if (response.ok) {
+                    Promise.resolve();
+                } else {
+                    console.error('postTodo: ', response.statusText);
+                    Promise.reject();
+                }
+            })
+            .catch(error => {
+                console.error('deleteTodo: ', error.message);
+                Promise.reject();
+            });
     }
 }
