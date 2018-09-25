@@ -10,12 +10,9 @@ class Todo {
 export default class TodoModelView {
     constructor(todoService) {
         this.todoService = todoService;
-        this.todoService.getTodos.then(mapOfTodos => {
-            this.todos = mapOfTodos;
-        });
-        this.todoList = document.getElementById("todo-list");
-        this.setTodoList();
+        this.todos = new Map();
 
+        this.todoList = document.getElementById("todo-list");
         this.addTodo = document.getElementById("add-todo");
         this.removeTodo = document.getElementById("remove-todo");
         this.todoId = document.getElementById("todo-id");
@@ -36,9 +33,8 @@ export default class TodoModelView {
                 let todo = new Todo(text);
                 this.todos.set(this.todos.size + 1 + "", todo);
                 this.setTodoList();
-                this.todoService.postTodo(todo).then(id => {
-                    if (id > 0) todo.id = id  // TODO for failed post!
-                });
+                let id = this.todoService.postTodo(todo);
+                if (id > 0) todo.id = id  // TODO for failed post!
             }
         });
 
@@ -48,30 +44,31 @@ export default class TodoModelView {
             this.todos.delete(todo.id);
             this.setTodoList();
             this.isRemoveTodoDisabled(true);
-            this.todoService.deleteTodo(todo).then(count => {
-                if (count < 1)
-                    this.todos.set(this.todos.size + 1 + "", todo); // TODO for failed delete!
-            });
+            let count = this.todoService.deleteTodo(todo);
+            if (count < 1) this.todos.set(this.todos.size + 1 + "", todo); // TODO for failed delete!
         });
 
         this.todoClosed.addEventListener("change", event => {
             console.log("todo-closed: onchange...", event.target.value);
             let todo = this.getSelectedTodo();
             todo.closed = new Date(event.target.value).getTime;
-            this.todoService.putTodo(todo).then(count => {
-                if (count < 1)
-                    console.error('putTodo: todo.closed update failed!', count)  // TODO for failed put!
-            });
+            let count = this.todoService.putTodo(todo);
+            if (count < 1) console.error('putTodo: todo.closed update failed!', count)  // TODO for failed put!
         });
 
         this.todoText.addEventListener("change", event => {
             console.log("todo: onchange...", event.target.value);
             let todo = this.getSelectedTodo();
             todo.text = event.target.value;
-            this.todoService.putTodo(todo).then(count => {
-                if (count < 1)
-                    console.error('putTodo: todo.text update failed!', count)  // TODO for failed put!
-            });
+            let count = this.todoService.putTodo(todo);
+            if (count < 1) console.error('putTodo: todo.text update failed!', count)  // TODO for failed put!
+        });
+    }
+
+    init() {
+        this.todoService.getTodos().then(mapOfTodos => {
+            this.todos = mapOfTodos;
+            this.setTodoList();
         });
     }
 
@@ -104,7 +101,7 @@ export default class TodoModelView {
     }
 
     clearTodoFields() {
-        this.todoId.value = "";
+        this.todoId.value = 0;
         this.todoOpened.value = "";
         this.todoClosed.value = "";
         this.todoText.value = "";
