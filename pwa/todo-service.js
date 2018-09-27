@@ -7,6 +7,7 @@ export default class TodoService {
             credentials: 'include',
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
+                'Accept': 'application/json'
             }
         };
         this.getTodosInit = Object.assign({method: "GET"}, this.todosInit);
