@@ -41,6 +41,11 @@ function fromStaticCache(request) {
     });
 }
 
+function invalidateStaticCache() {
+    caches.delete(CACHE).then(invalidatedCache => console.log('invalidateCache: Invalidated cache?', invalidatedCache));
+    toStaticCache();
+}
+
 self.addEventListener('install', event => {
     console.log('install: service worker installed.', event);
     event.waitUntil(toStaticCache());
