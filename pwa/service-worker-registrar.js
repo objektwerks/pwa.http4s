@@ -1,11 +1,4 @@
 export default () => {
-    navigator.serviceWorker.getRegistrations()
-        .then(registrations => {
-            for(let registration of registrations) {  
-                registration.unregister();
-            } 
-        });
-
     navigator.serviceWorker.register('/service-worker.js')
         .then(registration => console.log('registrar: service worker registered!', registration))
         .catch(error => console.error('registrar: failed to register service worker!', error));
