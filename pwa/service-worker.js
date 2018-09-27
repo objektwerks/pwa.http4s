@@ -72,3 +72,8 @@ self.addEventListener('sync', event => {
         event.waitUntil(Promise.resolve());
     }
 });
+
+self.addEventListener('message', event => {
+    console.log('message: received', event);
+    if (event.data === 'invalidateCache') invalidateCache();
+})
