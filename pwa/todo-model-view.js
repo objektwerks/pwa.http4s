@@ -1,3 +1,5 @@
+import registerServiceWorker from './service-worker-registrar.js';
+
 class Todo {
     constructor(text) {
         this.id = 0;
@@ -53,7 +55,7 @@ export default class TodoModelView {
 
         this.refreshTodos.addEventListener('click', event => {
             console.log('refresh-todos: click...', event);
-            navigator.serviceWorker.controller.postMessage('invalidateCache');
+            registerServiceWorker();
             this.init();
         });
 

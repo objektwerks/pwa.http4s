@@ -42,10 +42,17 @@ function fromCache(request) {
 }
 
 function invalidateCache() {
-    caches.delete(CACHE).then(invalidatedCache => console.log('invalidateCache: Invalidated cache?', invalidatedCache));
+    caches.delete(CACHE)
+        .then(invalidatedCache => {
+            console.log('invalidateCache: Invalidated cache?', invalidatedCache)
+        })
+        .catch(error => {
+            console.log('invalidateCache: Cache does not yet exist!', CACHE, error);
+        });
 }
 
 self.addEventListener('install', event => {
+    invalidateCache();
     console.log('install: service worker installed.', event);
     event.waitUntil(toCache());
 });
@@ -72,8 +79,3 @@ self.addEventListener('sync', event => {
         event.waitUntil(Promise.resolve());
     }
 });
-
-self.addEventListener('message', event => {
-    console.log('message: received', event);
-    if (event.data === 'invalidateCache') invalidateCache();
-})
