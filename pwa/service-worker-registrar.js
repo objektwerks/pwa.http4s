@@ -4,7 +4,7 @@ export default () => {
             registration.update();
             console.log('registrar: service worker registered!', registration)
         })
-        .catch(error => console.error('registrar: failed to register service worker!', error));
+        .catch(error => console.error('registrar: service worker registration failed!', error));
 
     navigator.serviceWorker.ready
         .then(registration => {
