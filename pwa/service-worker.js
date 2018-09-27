@@ -43,17 +43,13 @@ function fromCache(request) {
 
 function invalidateCache() {
     caches.delete(CACHE)
-        .then(invalidatedCache => {
-            console.log('invalidateCache: Invalidated cache?', invalidatedCache)
-        })
-        .catch(error => {
-            console.log('invalidateCache: Cache does not yet exist!', CACHE, error);
-        });
+        .then(invalidatedCache => console.log('invalidateCache: Invalidated cache?', invalidatedCache))
+        .catch(error => console.log('invalidateCache: Cache does not yet exist!', CACHE, error));
 }
 
 self.addEventListener('install', event => {
-    invalidateCache();
     console.log('install: service worker installed.', event);
+    invalidateCache();
     event.waitUntil(toCache());
 });
 

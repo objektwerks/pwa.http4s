@@ -1,5 +1,3 @@
-import registerServiceWorker from './service-worker-registrar.js';
-
 class Todo {
     constructor(text) {
         this.id = 0;
@@ -17,7 +15,6 @@ export default class TodoModelView {
         this.todoList = document.getElementById('todo-list');
         this.addTodo = document.getElementById('add-todo');
         this.removeTodo = document.getElementById('remove-todo');
-        this.refreshTodos = document.getElementById('refresh-todos');
         this.todoId = document.getElementById('todo-id');
         this.todoOpened = document.getElementById('todo-opened');
         this.todoClosed = document.getElementById('todo-closed');
@@ -27,7 +24,6 @@ export default class TodoModelView {
             console.log('todo-list: click...', event.target.id, event.target.textContent);
             this.setTodoFields(event.target.id);
             this.isRemoveTodoDisabled(false);
-            this.isRefreshTodosDisabled(false);
         });
 
         this.addTodo.addEventListener('click', event => {
@@ -48,16 +44,8 @@ export default class TodoModelView {
             this.todos.delete(todo.id);
             this.setTodoList();
             this.isRemoveTodoDisabled(true);
-            this.isRefreshTodosDisabled(true);
             let count = this.todoService.deleteTodo(todo);
             if (count < 1) this.todos.set(this.todos.size + 1 + '', todo); // TODO for failed delete!
-        });
-
-        this.refreshTodos.addEventListener('click', event => {
-            console.log('refresh-todos: click...', event);
-            this.isRefreshTodosDisabled(true);
-            registerServiceWorker();
-            this.init();
         });
 
         this.todoClosed.addEventListener('change', event => {
@@ -102,10 +90,6 @@ export default class TodoModelView {
 
     isRemoveTodoDisabled(isDisabled) {
         this.removeTodo.disabled = isDisabled;
-    }
-
-    isRefreshTodosDisabled(isDisabled) {
-        this.refreshTodos.disabled = isDisabled;
     }
 
     setTodoFields(id) {
