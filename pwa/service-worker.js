@@ -22,33 +22,32 @@ const ASSETS = [
 ];
 const SYNC = 'todo-sync';
 
-function toStaticCache() {
+function toCache() {
     return caches.open(CACHE).then(cache => {
-        console.log('toStaticCache: caching assets...');
+        console.log('toCache: caching assets...');
         return cache.addAll(ASSETS);
     });
 }
 
-function fromStaticCache(request) {
+function fromCache(request) {
     return caches.match(request).then(matching => {
         if (matching) {
-            console.log('fromStaticCache: matched request.', request.url);
+            console.log('fromCache: matched request.', request.url);
             return matching;
         } else {
-            console.log('fromStaticCache: match failed.', request.url);
+            console.log('fromCache: match failed.', request.url);
             return Promise.reject;
         }
     });
 }
 
-function invalidateStaticCache() {
+function invalidateCache() {
     caches.delete(CACHE).then(invalidatedCache => console.log('invalidateCache: Invalidated cache?', invalidatedCache));
-    toStaticCache();
 }
 
 self.addEventListener('install', event => {
     console.log('install: service worker installed.', event);
-    event.waitUntil(toStaticCache());
+    event.waitUntil(toCache());
 });
 
 self.addEventListener('activate', event => {
@@ -61,8 +60,8 @@ self.addEventListener('fetch', event => {
         console.warn('fetch: Bug [823392] cache === only-if-cached && mode !== same-orgin', event.request);
         return;
     }
-    console.log('fetch: calling fromStaticCache...');
-    event.respondWith(fromStaticCache(event.request).then(response => {
+    console.log('fetch: calling fromCache...');
+    event.respondWith(fromCache(event.request).then(response => {
         return response || fetch(event.request);
     }));
 });
