@@ -55,6 +55,7 @@ export default class TodoModelView {
 
         this.refreshTodos.addEventListener('click', event => {
             console.log('refresh-todos: click...', event);
+            this.isRefreshTodosDisabled(true);
             registerServiceWorker();
             this.init();
         });
