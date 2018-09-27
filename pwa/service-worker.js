@@ -42,7 +42,10 @@ function fromCache(request) {
 }
 
 function invalidateCache() {
-    caches.delete(CACHE).then(invalidatedCache => console.log('invalidateCache: Invalidated cache?', invalidatedCache))
+    caches.delete(CACHE).then(invalidatedCache => {
+        console.log('invalidateCache: Invalidated cache?', invalidatedCache)
+        if (invalidateCache) toCache();
+    })
 }
 
 self.addEventListener('install', event => {
@@ -52,6 +55,7 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
     console.log('activate: service worker activated.', event);
+    invalidateCache();
     return self.clients.claim();
 });
 
