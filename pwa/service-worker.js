@@ -64,11 +64,16 @@ self.addEventListener('fetch', event => {
         console.warn('fetch: Bug [823392] cache === only-if-cached && mode !== same-orgin', event.request);
         return;
     }
-    console.log('fetch: calling fromCache...', event.request);
-    event.respondWith(fromCache(event.request).then(response => {
-        console.log('fetch: response', response);
-        return response || fetch(event.request);
-    }));
+    console.log('fetch: calling fromCache...', event.request.url);
+    event.respondWith(fromCache(event.request)
+        .then(response => {
+            console.log('fetch: response', response);
+            return response || fetch(event.request);
+        })
+        .catch(error => {
+            console.log('fetch: error', error);
+        })
+    );
 });
 
 self.addEventListener('sync', event => {

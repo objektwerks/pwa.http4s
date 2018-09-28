@@ -10,7 +10,7 @@ object TodoConfig {
 
   case class DatabaseConfig(schema: String, driver: String, url: String, user: String, password: String)
 
-  case class CorsConfig(anyOrigin: Boolean, allowCredentials: Boolean, maxAge: Long)
+  case class CorsConfig(anyOrigin: Boolean, allowCredentials: Boolean, maxAge: Long, allowedOrigins: String)
 
   case class Config(server: ServerConfig, database: DatabaseConfig, cors: CorsConfig)
 

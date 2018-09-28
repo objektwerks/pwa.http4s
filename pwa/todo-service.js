@@ -10,10 +10,10 @@ export default class TodoService {
                 'Accept': 'application/json'
             }
         };
-        this.getTodosInit = Object.assign({method: "GET"}, this.todosInit);
-        this.postTodoInit = Object.assign({method: "POST"}, this.todosInit);
-        this.putTodoInit = Object.assign({method: "PUT"}, this.todosInit);
-        this.deleteTodoInit = Object.assign({method: "DELETE"}, this.todosInit);
+        this.getTodoInit = Object.assign({method: 'GET'}, this.todosInit);
+        this.postTodoInit = Object.assign({method: 'POST'}, this.todosInit);
+        this.putTodoInit = Object.assign({method: 'PUT'}, this.todosInit);
+        this.deleteTodoInit = Object.assign({method: 'DELETE'}, this.todosInit);
     }
 
     getTodos() {
