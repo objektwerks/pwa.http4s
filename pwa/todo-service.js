@@ -23,16 +23,16 @@ export default class TodoService {
                 return response.json();
             })
             .then(arrayOfTodos => {
-                console.log('getTodos:', JSON.stringify(arrayOfTodos));
+                console.log('getTodos: array', JSON.stringify(arrayOfTodos));
                 for (let todo of arrayOfTodos) {
                     mapOfTodos.set(mapOfTodos.size + 1, JSON.parse(todo));
                 }
                 return mapOfTodos;
             })
             .catch(error => {
-                console.error('getTodos:', error.message);
+                console.error('getTodos: error', error.message);
+                return mapOfTodos;
             });
-        return mapOfTodos;
     }
 
     async postTodo(todo) {
@@ -44,46 +44,51 @@ export default class TodoService {
                 return response.json();
             })
             .then(Id => {
-                console.log('postTodo:', JSON.stringify(Id));
+                console.log('postTodo: id', JSON.stringify(Id));
                 id = Id.id;
+                return id;
             })
             .catch(error => {
-                console.error('postTodo:', error.message);
+                console.error('postTodo: error', error.message);
+                return id;
             });
-        return id;
     }
 
     async putTodo(todo) {
         let init = Object.assign({body: JSON.stringify(todo)}, this.putTodoInit);
+        console.log('putTodo: init', init);
         let count = 0;
         await fetch(this.todosUri, init)
             .then(response => {
                 return response.json();
             })
             .then(Count => {
-                console.log('putTodo:', JSON.stringify(Count));
+                console.log('putTodo: count', JSON.stringify(Count));
                 count = Count.count;
+                return count;
             })
             .catch(error => {
-                console.error('putTodo:', error.message);
+                console.error('putTodo: error', error.message);
+                return count;
             });
-        return count;
     }
 
     async deleteTodo(todo) {
         let uri = this.todosUri + '/' + todo.id;
+        console.log('deleteTodo: init', init);
         let count = 0;
         await fetch(uri, this.deleteTodoInit)
             .then(response => {
                 return response.json();
             })
             .then(Count => {
-                console.log('deleteodo:', JSON.stringify(Count));
+                console.log('deleteodo: count', JSON.stringify(Count));
                 count = Count.count;
+                return count;
             })
             .catch(error => {
-                console.error('deleteTodo: ', error.message);
+                console.error('deleteTodo: error', error.message);
+                return count;
             });
-        return count;
     }
 }

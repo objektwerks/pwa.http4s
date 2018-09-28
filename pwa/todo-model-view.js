@@ -31,38 +31,42 @@ export default class TodoModelView {
             let text = prompt('Todo:', 'Please, enter a todo.');
             if (text !== null && text.length > 0) {
                 let todo = new Todo(text);
-                console.log('addTodo: todo', todo);
                 this.todos.set(this.todos.size + 1 + '', todo);
                 this.setTodoList();
-                let id = this.todoService.postTodo(todo);
-                if (id > 0) todo.id = id  // TODO for failed post!
+                this.todoService.postTodo(todo).then(id => todo.id = id );
             }
         });
 
         this.removeTodo.addEventListener('click', event => {
             console.log('remove-todo: click...', event);
             let todo = this.getSelectedTodo();
-            this.todos.delete(todo.id);
-            this.setTodoList();
-            this.isRemoveTodoDisabled(true);
-            let count = this.todoService.deleteTodo(todo);
-            if (count < 1) this.todos.set(this.todos.size + 1 + '', todo); // TODO for failed delete!
+            this.todoService.deleteTodo(todo).then(count => {
+                if (count === 1) {
+                    this.todos.delete(todo.id);
+                    this.setTodoList();
+                    this.isRemoveTodoDisabled(true);
+                } else {
+                    console.error('removeTodo: remove todo failed!', count);
+                }
+            })
         });
 
         this.todoClosed.addEventListener('change', event => {
             console.log('todo-closed: onchange...', event.target.value);
             let todo = this.getSelectedTodo();
             todo.closed = new Date(event.target.value).getTime();
-            let count = this.todoService.putTodo(todo);
-            if (count < 1) console.error('putTodo: todo.closed update failed!', count)  // TODO for failed put!
+            this.todoService.putTodo(todo).then(count => {
+                if (count < 1) console.error('putTodo: todo.closed update failed!', count);
+            })
         });
 
         this.todoText.addEventListener('change', event => {
             console.log('todo: onchange...', event.target.value);
             let todo = this.getSelectedTodo();
             todo.text = event.target.value;
-            let count = this.todoService.putTodo(todo);
-            if (count < 1) console.error('putTodo: todo.text update failed!', count)  // TODO for failed put!
+            this.todoService.putTodo(todo).then(count => {
+                if (count < 1) console.error('putTodo: todo.text update failed!', count);
+            })
         });
     }
 
