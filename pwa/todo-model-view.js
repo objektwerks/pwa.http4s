@@ -54,7 +54,7 @@ export default class TodoModelView {
                 .then(Count => {
                     let count = Count.count;
                     if (count === 1) {
-                        this.todos.delete(todo.id);
+                        this.todos.delete(todo);
                         this.setTodoList();
                         this.isRemoveTodoDisabled(true);
                     } else {
@@ -124,7 +124,7 @@ export default class TodoModelView {
     }
 
     getSelectedTodo() {
-        return this.todos.get(this.todId.value);
+        return this.todos.get(this.todoId.value);
     }
 
     isRemoveTodoDisabled(isDisabled) {
@@ -134,8 +134,8 @@ export default class TodoModelView {
     setTodoFields(id) {
         let todo = this.todos.get(id);
         this.todoId.value = todo.id;
-        this.todoOpened.value = new Date(todo.opened).toUTCString();
-        this.todoClosed.value = new Date(todo.closed).toUTCString();
+        this.todoOpened.value = new Date(todo.opened).toDateString();
+        this.todoClosed.value = new Date(todo.closed).toDateString();
         this.todoTask.value = todo.task;
     }
 
