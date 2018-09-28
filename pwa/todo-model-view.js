@@ -54,9 +54,9 @@ export default class TodoModelView {
                 .then(Count => {
                     let count = Count.count;
                     if (count === 1) {
-                        this.todos.delete(todo);
-                        this.setTodoList();
+                        this.todos.delete(todo.id);
                         this.isRemoveTodoDisabled(true);
+                        this.setTodoList();
                     } else {
                         console.error('removeTodo: remove todo failed!', count);
                     }
@@ -134,8 +134,8 @@ export default class TodoModelView {
     setTodoFields(id) {
         let todo = this.todos.get(id);
         this.todoId.value = todo.id;
-        this.todoOpened.value = new Date(todo.opened).toDateString();
-        this.todoClosed.value = new Date(todo.closed).toDateString();
+        this.todoOpened.value = new Intl.DateTimeFormat().format(new Date(todo.opened));
+        this.todoClosed.value = new Intl.DateTimeFormat().format(new Date(todo.closed));
         this.todoTask.value = todo.task;
     }
 
