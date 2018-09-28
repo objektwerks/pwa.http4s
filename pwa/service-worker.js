@@ -36,7 +36,7 @@ function fromCache(request) {
             return matching;
         } else {
             console.log('fromCache: match failed.', request.url);
-            return Promise.reject;
+            return Promise.reject("cache match failed");
         }
     });
 }
@@ -67,11 +67,14 @@ self.addEventListener('fetch', event => {
     console.log('fetch: calling fromCache...', event.request.url);
     event.respondWith(fromCache(event.request)
         .then(response => {
-            console.log('fetch: response', response);
-            return response || fetch(event.request);
+            console.log('fetch: in cache');
+            return response;
         })
-        .catch(error => {
-            console.log('fetch: error', error);
+        .catch(_ => {
+            console.log('fetch: not in cache, calling server...');
+            return fetch(event.request).then(response => {
+                return response;
+            }).catch(error => console.log('fetch: server call failed', error));
         })
     );
 });
