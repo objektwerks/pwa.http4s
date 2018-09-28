@@ -2,8 +2,8 @@ class Todo {
     constructor(text) {
         this.id = 0;
         this.text = text;
-        this.opened = new Date().getTime;
-        this.closed = new Date().getTime;
+        this.opened = new Date().getTime();
+        this.closed = new Date().getTime();
     }
 }
 
@@ -31,6 +31,7 @@ export default class TodoModelView {
             let text = prompt('Todo:', 'Please, enter a todo.');
             if (text !== null && text.length > 0) {
                 let todo = new Todo(text);
+                console.log('addTodo: todo', todo);
                 this.todos.set(this.todos.size + 1 + '', todo);
                 this.setTodoList();
                 let id = this.todoService.postTodo(todo);
@@ -51,7 +52,7 @@ export default class TodoModelView {
         this.todoClosed.addEventListener('change', event => {
             console.log('todo-closed: onchange...', event.target.value);
             let todo = this.getSelectedTodo();
-            todo.closed = new Date(event.target.value).getTime;
+            todo.closed = new Date(event.target.value).getTime();
             let count = this.todoService.putTodo(todo);
             if (count < 1) console.error('putTodo: todo.closed update failed!', count)  // TODO for failed put!
         });
@@ -75,6 +76,7 @@ export default class TodoModelView {
     setTodoList() {
         this.clearTodoFields();
         this.todoList.innerHTML = '';
+        console.log('setTodoList: todos', this.todos);
         for (let [id, todo] of this.todos) {
             let li = document.createElement('li');
             li.appendChild(document.createTextNode(todo.text));
@@ -95,8 +97,8 @@ export default class TodoModelView {
     setTodoFields(id) {
         let todo = this.todos.get(id);
         this.todoId.value = todo.id;
-        this.todoOpened.value = new Date(todo.opened).toLocaleDateString;
-        this.todoClosed.value = new Date(todo.closed).toLocaleDateString;
+        this.todoOpened.value = new Date(todo.opened).toLocaleDateString();
+        this.todoClosed.value = new Date(todo.closed).toLocaleDateString();
         this.todoText.value = todo.text;
     }
 

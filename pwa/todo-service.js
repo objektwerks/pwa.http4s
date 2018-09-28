@@ -37,6 +37,7 @@ export default class TodoService {
 
     async postTodo(todo) {
         let init = Object.assign({body: JSON.stringify(todo)}, this.postTodoInit);
+        console.log('postTodo: init', init);
         let id = 0;
         await fetch(this.todosUri, init)
             .then(response => {
