@@ -103,7 +103,7 @@ export default class TodoModelView {
             .then(arrayOfTodos => {
                 console.log('init: arrayOfTodos', arrayOfTodos);
                 for (let todo of arrayOfTodos) {
-                    this.todos.set(todos.size + 1 + '', JSON.parse(todo));
+                    this.todos.set(this.todos.size + 1 + '', todo);
                 }
                 this.setTodoList();
             })
@@ -134,8 +134,8 @@ export default class TodoModelView {
     setTodoFields(id) {
         let todo = this.todos.get(id);
         this.todoId.value = todo.id;
-        this.todoOpened.value = new Date(todo.opened).toLocaleDateString();
-        this.todoClosed.value = new Date(todo.closed).toLocaleDateString();
+        this.todoOpened.value = new Date(todo.opened).toUTCString();
+        this.todoClosed.value = new Date(todo.closed).toUTCString();
         this.todoTask.value = todo.task;
     }
 
