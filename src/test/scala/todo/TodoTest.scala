@@ -48,7 +48,7 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
   }
 
   test("post") {
-    val todo = Todo(text = "buy beer")
+    val todo = Todo(task = "buy beer")
     val id = post(todo)
     println(id)
     println(id.asJson)
@@ -81,7 +81,7 @@ class TodoTest extends FunSuite with BeforeAndAfterAll with IOChecker {
     println(count.asJson)
     assert(count.count == 1)
     assert(get.isEmpty)
-    assert(post(Todo(text = "drink beer")).id == 2)
+    assert(post(Todo(task = "drink beer")).id == 2)
   }
 
   def post(todo: Todo): Id = {
