@@ -44,7 +44,7 @@ function fromCache(request) {
 function invalidateCache() {
     caches.delete(CACHE).then(invalidatedCache => {
         console.log('invalidateCache: Invalidated cache?', invalidatedCache)
-        if (invalidateCache) toCache();
+        if (invalidatedCache) toCache();
     })
 }
 
