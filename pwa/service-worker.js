@@ -64,8 +64,9 @@ self.addEventListener('fetch', event => {
         console.warn('fetch: Bug [823392] cache === only-if-cached && mode !== same-orgin', event.request);
         return;
     }
-    console.log('fetch: calling fromCache...');
+    console.log('fetch: calling fromCache...', event.request);
     event.respondWith(fromCache(event.request).then(response => {
+        console.log('fetch: response', response);
         return response || fetch(event.request);
     }));
 });
