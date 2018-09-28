@@ -9,7 +9,7 @@ import io.circe.generic.auto._
 import io.circe.{Decoder, Encoder, HCursor, Json}
 import org.http4s.circe._
 
-case class Todo(id: Int = 0, task: String, opened: Timestamp = Timestamp.from(Instant.now), closed: Option[Timestamp] = None)
+case class Todo(id: Int = 0, text: String, opened: Timestamp = Timestamp.from(Instant.now), closed: Timestamp = Timestamp.from(Instant.now))
 
 object Todo {
   implicit val todoDecoder = jsonOf[IO, Todo]
