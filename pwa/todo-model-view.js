@@ -1,7 +1,7 @@
 class Todo {
-    constructor(text) {
+    constructor(task) {
         this.id = 0;
-        this.text = text;
+        this.task = task;
         this.opened = new Date().getTime();
         this.closed = new Date().getTime();
     }
@@ -18,7 +18,7 @@ export default class TodoModelView {
         this.todoId = document.getElementById('todo-id');
         this.todoOpened = document.getElementById('todo-opened');
         this.todoClosed = document.getElementById('todo-closed');
-        this.todoText = document.getElementById('todo-text');
+        this.todoTask = document.getElementById('todo-task');
     
         this.todoList.addEventListener('click', event => {
             console.log('todo-list: click...', event.target.id, event.target.textContent);
@@ -28,9 +28,9 @@ export default class TodoModelView {
 
         this.addTodo.addEventListener('click', event => {
             console.log('add-todo: click...', event);
-            let text = prompt('Todo:', 'Please, enter a todo.');
-            if (text !== null && text.length > 0) {
-                let todo = new Todo(text);
+            let task = prompt('Todo:', 'Please, enter a todo.');
+            if (task !== null && task.length > 0) {
+                let todo = new Todo(task);
                 this.todoService.postTodo(todo)
                     .then(response => {
                         return response.json()
@@ -79,19 +79,19 @@ export default class TodoModelView {
                 .catch(error => console.log('putTodo: todo.closed update error', error));   
         });
 
-        this.todoText.addEventListener('change', event => {
+        this.todoTask.addEventListener('change', event => {
             console.log('todo: onchange...', event.target.value);
             let todo = this.getSelectedTodo();
-            todo.text = event.target.value;
+            todo.task = event.target.value;
             this.todoService.putTodo(todo)
                 .then(response => {
                     return response.json()
                 })
                 .then(Count => {
                     let count = Count.count;
-                    if (count < 1) console.error('putTodo: todo.text update failed!', count);
+                    if (count < 1) console.error('putTodo: todo.task update failed!', count);
                 })
-                .catch(error => console.log('putTodo: todo.text update error', error));   
+                .catch(error => console.log('putTodo: todo.task update error', error));   
         });
     }
 
@@ -116,7 +116,7 @@ export default class TodoModelView {
         console.log('setTodoList: todos', this.todos);
         for (let [id, todo] of this.todos) {
             let li = document.createElement('li');
-            li.appendChild(document.createTextNode(todo.text));
+            li.appendChild(document.createTextNode(todo.task));
             li.setAttribute('id', id);
             li.setAttribute('class', 'w3-hover-light-gray');
             this.todoList.appendChild(li);
@@ -136,13 +136,13 @@ export default class TodoModelView {
         this.todoId.value = todo.id;
         this.todoOpened.value = new Date(todo.opened).toLocaleDateString();
         this.todoClosed.value = new Date(todo.closed).toLocaleDateString();
-        this.todoText.value = todo.text;
+        this.todoTask.value = todo.task;
     }
 
     clearTodoFields() {
         this.todoId.value = 0;
         this.todoOpened.value = '';
         this.todoClosed.value = '';
-        this.todoText.value = '';
+        this.todoTask.value = '';
     }
 }
