@@ -1,7 +1,7 @@
 name := "pwa.http4s"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.7"
 libraryDependencies ++= {
   val catsVersion = "1.4.0"
   val doobieVersion = "0.5.3"

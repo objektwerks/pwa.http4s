@@ -20,8 +20,8 @@ object TodoApp extends StreamApp[IO] {
         anyOrigin = cors.anyOrigin,
         allowCredentials = cors.allowCredentials,
         maxAge = cors.maxAge,
-        allowedMethods = Some(cors.allowedMethods.toSet),
-        allowedOrigins = cors.allowedOrigins.toSet
+        allowedMethods = Some(cors.allowedMethods),
+        allowedOrigins = cors.allowedOrigins
       )
       xa <- Stream.eval(HikariTransactor.newHikariTransactor[IO](db.driver, db.url, db.user, db.password))
       repository = TodoRepository(xa, db.schema)
