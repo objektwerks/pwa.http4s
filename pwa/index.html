@@ -34,11 +34,11 @@
             </div>
             <div class="w3-row">
                 <div class="w3-col" style="width:20%"><label>Closed</label></div>
-                <div class="w3-col" style="width:80%"><input id="todo-closed" class="w3-input w3-input w3-hover-light-gray" type="datetime"/></div>
+                <div class="w3-col" style="width:80%"><input id="todo-closed" class="" type="datetime"/></div>
             </div>
             <div class="w3-row">
                 <div class="w3-col" style="width:20%"><label>Todo</label></div>
-                <div class="w3-col" style="width:80%"><input id="todo-task" class="w3-input w3-input w3-hover-light-gray" type="text"/></div>
+                <div class="w3-col" style="width:80%"><input id="todo-task" class="" type="text"/></div>
             </div>
         </div>
         <div class="w3-container w3-indigo">
@@ -48,9 +48,14 @@
             <ul id="todo-list" class="w3-ul w3-hoverable">
            </ul>
         </div>
+        <div class="w3-container w3-indigo">
+            <h3>Add</h3>
+        </div>
         <div class="w3-container" style="padding-top: 10px">
+            <div class="w3-row">
+                <div class="w3-col" style="width:100%"><input id="new-todo-task" class="w3-input w3-hover-light-gray" type="text"/></div>
+            </div>
             <div class="w3-bar">
-                <input id="new-todo-task" class="w3-input w3-input w3-hover-light-gray" type="text"/>
                 <button id="add-todo" class="w3-button w3-circle w3-white w3-border w3-hover-light-gray" title="Add Todo" disabled>&plus;</button>
                 <button id="remove-todo" class="w3-button w3-circle w3-white w3-border w3-hover-light-gray" title="Remove Todo" disabled>&minus;</button>
             </div>

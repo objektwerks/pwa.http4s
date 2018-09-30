@@ -30,11 +30,12 @@ export default class TodoModelView {
         this.newTodoTask.addEventListener('change', event => {
             console.log('new-todo-task: onchange...', event.target.value);
             let task = this.newTodoTask.value;
-            (task === null || task.length < 1) ? isAddTodoDisabled(true) : isAddTodoDisabled(false);
+            (task === null || task.length < 1) ? this.isAddTodoDisabled(true) : this.isAddTodoDisabled(false);
         });
 
         this.addTodo.addEventListener('click', event => {
             console.log('add-todo: click...', event);
+            this.isAddTodoDisabled(true);
             let task = this.newTodoTask.value;
             let todo = new Todo(task);
             this.todoService.postTodo(todo)
@@ -52,7 +53,7 @@ export default class TodoModelView {
 
         this.removeTodo.addEventListener('click', event => {
             console.log('remove-todo: click...', event);
-            let todo = this.getSelectedTodo();
+            let todo = this.todos.get(this.todoId.value);
             this.todoService.deleteTodo(todo)
                 .then(response => {
                     return response.json()
@@ -72,7 +73,7 @@ export default class TodoModelView {
 
         this.todoClosed.addEventListener('change', event => {
             console.log('todo-closed: onchange...', event.target.value);
-            let todo = this.getSelectedTodo();
+            let todo = this.todos.get(this.todoId.value);
             todo.closed = new Date(event.target.value).getTime();
             this.todoService.putTodo(todo)
                 .then(response => {
@@ -87,7 +88,7 @@ export default class TodoModelView {
 
         this.todoTask.addEventListener('change', event => {
             console.log('todo: onchange...', event.target.value);
-            let todo = this.getSelectedTodo();
+            let todo = this.todos.get(this.todoId.value);
             todo.task = event.target.value;
             this.todoService.putTodo(todo)
                 .then(response => {
@@ -129,10 +130,6 @@ export default class TodoModelView {
         }
     }
 
-    getSelectedTodo() {
-        return this.todos.get(this.todoId.value);
-    }
-
     isAddTodoDisabled(isDisabled) {
         this.addTodo.disabled = isDisabled;
     }
@@ -147,6 +144,10 @@ export default class TodoModelView {
         this.todoOpened.value = new Intl.DateTimeFormat().format(new Date(todo.opened));
         this.todoClosed.value = new Intl.DateTimeFormat().format(new Date(todo.closed));
         this.todoTask.value = todo.task;
+        this.todoClosed.readOnly = false;
+        this.todoTask.readOnly = false;
+        this.todoClosed.setAttribute('class', 'w3-input w3-white w3-hover-light-gray');
+        this.todoTask.setAttribute('class', 'w3-input w3-white w3-hover-light-gray');
     }
 
     clearTodoFields() {
@@ -154,5 +155,9 @@ export default class TodoModelView {
         this.todoOpened.value = '';
         this.todoClosed.value = '';
         this.todoTask.value = '';
-    }
+        this.todoClosed.readOnly = true;
+        this.todoTask.readOnly = true;
+        this.todoClosed.setAttribute('class', 'w3-input w3-light-gray w3-hover-light-gray');
+        this.todoTask.setAttribute('class', 'w3-input w3-light-gray w3-hover-light-gray');
+     }
 }
