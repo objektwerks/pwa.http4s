@@ -13,6 +13,7 @@ export default class TodoModelView {
         this.todos = new Map();
 
         this.todoList = document.getElementById('todo-list');
+        this.newTodoTask = document.getElementById('new-todo-task');
         this.addTodo = document.getElementById('add-todo');
         this.removeTodo = document.getElementById('remove-todo');
         this.todoId = document.getElementById('todo-id');
@@ -26,22 +27,27 @@ export default class TodoModelView {
             this.isRemoveTodoDisabled(false);
         });
 
+        this.newTodoTask.addEventListener('change', event => {
+            console.log('new-todo-task: onchange...', event.target.value);
+            let task = this.newTodoTask.value;
+            (task === null || task.length < 1) ? isAddTodoDisabled(true) : isAddTodoDisabled(false);
+        });
+
         this.addTodo.addEventListener('click', event => {
             console.log('add-todo: click...', event);
-            let task = prompt('Todo:', 'Please, enter a todo.');
-            if (task !== null && task.length > 0) {
-                let todo = new Todo(task);
-                this.todoService.postTodo(todo)
-                    .then(response => {
-                        return response.json()
-                    })
-                    .then(Id => {
-                        todo.id = Id.id;
-                        this.todos.set(this.todos.size + 1 + '', todo);
-                        this.setTodoList();
-                    })
-                    .catch(error => console.log('addTodo: error', error));
-            }
+            let task = this.newTodoTask.value;
+            let todo = new Todo(task);
+            this.todoService.postTodo(todo)
+                .then(response => {
+                    return response.json()
+                })
+                .then(Id => {
+                    todo.id = Id.id;
+                    this.todos.set(this.todos.size + 1 + '', todo);
+                    this.newTodoTask.value = '';
+                    this.setTodoList();
+                })
+                .catch(error => console.log('addTodo: error', error));
         });
 
         this.removeTodo.addEventListener('click', event => {
@@ -125,6 +131,10 @@ export default class TodoModelView {
 
     getSelectedTodo() {
         return this.todos.get(this.todoId.value);
+    }
+
+    isAddTodoDisabled(isDisabled) {
+        this.addTodo.disabled = isDisabled;
     }
 
     isRemoveTodoDisabled(isDisabled) {
