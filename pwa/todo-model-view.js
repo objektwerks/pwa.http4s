@@ -44,7 +44,7 @@ export default class TodoModelView {
         });
 
         this.todoClosed.addEventListener('change', event => {
-            console.log('todo-closed: onchange...', event.target.value);
+            console.log('todo-closed: change...', event.target.value);
             let todo = this.todos.get(this.todoId.value);
             todo.closed = new Date(event.target.value).getTime();
             this.todoService.putTodo(todo)
@@ -59,7 +59,7 @@ export default class TodoModelView {
         });
 
         this.todoTask.addEventListener('change', event => {
-            console.log('todo: onchange...', event.target.value);
+            console.log('todo: change...', event.target.value);
             let todo = this.todos.get(this.todoId.value);
             todo.task = event.target.value;
             this.todoService.putTodo(todo)
