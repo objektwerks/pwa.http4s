@@ -113,8 +113,8 @@ export default class TodoModelView {
     setTodoFields(id) {
         let todo = this.todos.get(id);
         this.todoId.value = todo.id;
-        this.todoOpened.value = new Date(todo.opened);
-        this.todoClosed.value = new Date(todo.closed);
+        this.todoOpened.value = new Date(todo.opened).toISOString();
+        this.todoClosed.value = new Date(todo.closed).toISOString();
         this.todoTask.value = todo.task;
         this.todoClosed.readOnly = false;
         this.todoTask.readOnly = false;
