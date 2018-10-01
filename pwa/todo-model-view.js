@@ -21,7 +21,7 @@ export default class TodoModelView {
     
         this.todoList.addEventListener('click', event => {
             console.log('todo-list: click...', event.target.id, event.target.textContent);
-            this.setTodoFields(event.target.id);
+            this.setTodoInputs(event.target.id);
         });
 
         this.addTodo.addEventListener('change', event => {
@@ -91,16 +91,14 @@ export default class TodoModelView {
 
     setTodoList() {
         console.log('setTodoList: todos', this.todos);
-        this.clearTodoFields();
+        this.unsetTodoInputs();
         for (let [id, todo] of this.todos) {
             let span = document.createElement('span');
             span.setAttribute('id', id);
             span.setAttribute('onclick', "this.parentElement.style.display='none'");
             span.setAttribute('class', 'w3-button w3-transparent w3-display-right');
             span.innerHTML = '&times;';
-            span.addEventListener('click', event => {
-                this.onRemoveTodo(event);
-            });
+            span.addEventListener('click', event => this.onRemoveTodo(event));
             let li = document.createElement('li');
             li.appendChild(document.createTextNode(todo.task));
             li.setAttribute('id', id);
@@ -110,7 +108,7 @@ export default class TodoModelView {
         }
     }
 
-    setTodoFields(id) {
+    setTodoInputs(id) {
         let todo = this.todos.get(id);
         this.todoId.value = todo.id;
         this.todoOpened.value = new Date(todo.opened).toISOString();
@@ -122,7 +120,7 @@ export default class TodoModelView {
         this.todoTask.setAttribute('class', 'w3-input w3-white w3-hover-light-gray');
     }
 
-    clearTodoFields() {
+    unsetTodoInputs() {
         this.todoList.innerHTML = '';
         this.addTodo.value = '';
         this.todoId.value = 0;
@@ -133,9 +131,9 @@ export default class TodoModelView {
         this.todoTask.readOnly = true;
         this.todoClosed.setAttribute('class', 'w3-input w3-light-gray w3-hover-light-gray');
         this.todoTask.setAttribute('class', 'w3-input w3-light-gray w3-hover-light-gray');
-     }
+    }
 
-     onRemoveTodo(event) {
+    onRemoveTodo(event) {
         console.log('onRemoveTodo: clicked...', event.target.id);
         let todo = this.todos.get(event.target.id);
         this.todoService.deleteTodo(todo)
