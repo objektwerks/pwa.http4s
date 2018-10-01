@@ -62,13 +62,18 @@ export default class TodoModelView {
     setTodoInputs(id) {
         let todo = this.todos.get(id);
         this.todoId.value = todo.id;
-        this.todoOpened.value = new Date(todo.opened).toISOString().replace('Z', '');
-        this.todoClosed.value = new Date(todo.closed).toISOString().replace('Z', '');
+        this.todoOpened.value = this.timeStampToDateString(todo.opened);
+        this.todoClosed.value = this.timeStampToDateString(todo.closed);
         this.todoTask.value = todo.task;
         this.todoClosed.readOnly = false;
         this.todoTask.readOnly = false;
         this.todoClosed.setAttribute('class', 'w3-input w3-white w3-hover-light-gray');
         this.todoTask.setAttribute('class', 'w3-input w3-white w3-hover-light-gray');
+    }
+
+    timeStampToDateString(timestamp) {
+        let datetime = new Date(timestamp).toISOString();
+        return datetime.substr(0, datetime.lastIndexOf(':'));
     }
 
     unsetTodoInputs() {
