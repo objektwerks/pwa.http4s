@@ -19,63 +19,14 @@ export default class TodoModelView {
         this.todoClosed = document.getElementById('todo-closed');
         this.todoTask = document.getElementById('todo-task');
     
-        this.todoList.addEventListener('click', event => {
-            console.log('todo-list: click...', event.target.id, event.target.textContent);
-            this.setTodoInputs(event.target.id);
-        });
-
-        this.addTodo.addEventListener('change', event => {
-            console.log('add-task: change...', event.target.value);
-            let task = this.addTodo.value;
-            if (task !== null && task.length > 0) {
-                let task = this.addTodo.value;
-                let todo = new Todo(task);
-                this.todoService.postTodo(todo)
-                    .then(response => {
-                        return response.json()
-                    })
-                    .then(Id => {
-                        todo.id = Id.id;
-                        this.todos.set(todo.id + '', todo);
-                        this.setTodoList();
-                    })
-                    .catch(error => console.log('addTodo: error', error));
-            }
-        });
-
-        this.todoClosed.addEventListener('change', event => {
-            console.log('todo-closed: change...', event.target.value);
-            let todo = this.todos.get(this.todoId.value);
-            todo.closed = new Date(event.target.value).getTime();
-            this.todoService.putTodo(todo)
-                .then(response => {
-                    return response.json()
-                })
-                .then(Count => {
-                    let count = Count.count;
-                    if (count < 1) console.error('putTodo: todo.closed update failed!', count);
-                })
-                .catch(error => console.log('putTodo: todo.closed update error', error));   
-        });
-
-        this.todoTask.addEventListener('change', event => {
-            console.log('todo: change...', event.target.value);
-            let todo = this.todos.get(this.todoId.value);
-            todo.task = event.target.value;
-            this.todoService.putTodo(todo)
-                .then(response => {
-                    return response.json()
-                })
-                .then(Count => {
-                    let count = Count.count;
-                    if (count < 1) console.error('putTodo: todo.task update failed!', count);
-                })
-                .catch(error => console.log('putTodo: todo.task update error', error));   
-        });
+        this.todoList.addEventListener('click', event => this.onClickTodoList(event));
+        this.addTodo.addEventListener('change', event => this.onChangeAddTodo(event));
+        this.todoClosed.addEventListener('change', event => this.onChangeTodoClosed(event));
+        this.todoTask.addEventListener('change', event => this.onChangeTodoTask(event));
     }
 
     init() {
-        this.todoService.getTodos()
+        this.todoService.listTodos()
             .then(response => {
                 return response.json()
             })
@@ -86,11 +37,11 @@ export default class TodoModelView {
                 }
                 this.setTodoList();
             })
-            .catch(error => console.log('init: error', error));
+            .catch(error => console.error('init: failed!', error));
     }
 
     setTodoList() {
-        console.log('setTodoList: todos', this.todos);
+        console.log('setTodoList...', this.todos);
         this.unsetTodoInputs();
         for (let [id, todo] of this.todos) {
             let span = document.createElement('span');
@@ -98,7 +49,7 @@ export default class TodoModelView {
             span.setAttribute('onclick', "this.parentElement.style.display='none'");
             span.setAttribute('class', 'w3-button w3-transparent w3-display-right');
             span.innerHTML = '&times;';
-            span.addEventListener('click', event => this.onRemoveTodo(event));
+            span.addEventListener('click', event => this.onClickRemoveTodo(event));
             let li = document.createElement('li');
             li.appendChild(document.createTextNode(todo.task));
             li.setAttribute('id', id);
@@ -133,23 +84,74 @@ export default class TodoModelView {
         this.todoTask.setAttribute('class', 'w3-input w3-light-gray w3-hover-light-gray');
     }
 
-    onRemoveTodo(event) {
-        console.log('onRemoveTodo: clicked...', event.target.id);
+    onClickTodoList(event) {
+        console.log('onClickTodoList...', event.target.id, event.target.textContent);
+        this.setTodoInputs(event.target.id);
+    }
+
+    onChangeAddTodo(event) {
+        console.log('onChangeAddTodo...', event.target.value);
+        let task = this.addTodo.value;
+        if (task !== null && task.length > 0) {
+            let task = this.addTodo.value;
+            let todo = new Todo(task);
+            this.todoService.addTodo(todo)
+                .then(response => {
+                    return response.json()
+                })
+                .then(Id => {
+                    todo.id = Id.id;
+                    this.todos.set(todo.id + '', todo);
+                    this.setTodoList();
+                })
+                .catch(error => console.error('onChangeAddTodo: error', error));
+        }
+    };
+
+    onClickRemoveTodo(event) {
+        console.log('onClickRemoveTodo...', event.target.id);
         let todo = this.todos.get(event.target.id);
-        this.todoService.deleteTodo(todo)
+        this.todoService.removeTodo(todo)
             .then(response => {
                 return response.json()
             })
             .then(Count => {
                 let count = Count.count;
                 if (count === 1) {
-                    console.log('onRemoveTodo: deleted...', count);
+                    console.log('onClickRemoveTodo: removed...', count);
                     this.todos.delete(todo.id + '');
                     this.setTodoList();
                 } else {
-                    console.error('onRemoveTodo: remove todo failed!', count);
+                    console.error('onClickRemoveTodo: remove failed!', count);
                 }
             })
-            .catch(error => console.log('onRemoveTodo: error', error));
+            .catch(error => console.error('onClickRemoveTodo: error', error));
+    };
+
+    onChangeTodoClosed(event) {
+        console.log('onChangeTodoClosed...', event.target.value);
+        let todo = this.todos.get(this.todoId.value);
+        todo.closed = new Date(event.target.value).getTime();
+        this.onChangeUpdateTodo(todo);   
+    };
+
+    onChangeTodoTask(event) {
+        console.log('onChangeTodoTask...', event.target.value);
+        let todo = this.todos.get(this.todoId.value);
+        todo.task = event.target.value;
+        this.onChangeUpdateTodo(todo);   
+    };
+
+    onChangeUpdateTodo(todo) {
+        console.log('onChangeUpdateTodo...', todo);
+        this.todoService.updateTodo(todo)
+            .then(response => {
+                return response.json()
+            })
+            .then(Count => {
+                let count = Count.count;
+                if (count < 1) console.error('onChangeUpdateTodo: put todo.task failed!', count);
+            })
+            .catch(error => console.error('onChangeUpdateTodo: put todo.task error', error));   
     };
 }

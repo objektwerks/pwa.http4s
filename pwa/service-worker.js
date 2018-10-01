@@ -35,7 +35,6 @@ function fromCache(request) {
             console.log('fromCache: matched request.', request.url);
             return matching;
         } else {
-            console.log('fromCache: match failed.', request.url);
             return Promise.reject("cache match failed");
         }
     });
@@ -43,7 +42,7 @@ function fromCache(request) {
 
 function invalidateCache() {
     caches.delete(CACHE).then(invalidatedCache => {
-        console.log('invalidateCache: Invalidated cache?', invalidatedCache)
+        console.log('invalidateCache: cache invalidated?', invalidatedCache);
         if (invalidatedCache) toCache();
     })
 }
@@ -61,20 +60,19 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
     if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
-        console.warn('fetch: Bug [823392] cache === only-if-cached && mode !== same-orgin', event.request);
+        console.warn('fetch: Bug [823392] cache === only-if-cached && mode !== same-orgin', event.request.url);
         return;
     }
-    console.log('fetch: calling fromCache...', event.request.url);
     event.respondWith(fromCache(event.request)
         .then(response => {
-            console.log('fetch: in cache');
+            console.log('fetch: in cache.', event.request.url);
             return response;
         })
         .catch(_ => {
             console.log('fetch: not in cache, calling server...');
             return fetch(event.request).then(response => {
                 return response;
-            }).catch(error => console.log('fetch: server call failed', error));
+            }).catch(error => console.error('fetch: server call failed!', error));
         })
     );
 });

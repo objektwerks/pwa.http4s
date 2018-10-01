@@ -16,21 +16,21 @@ export default class TodoService {
         this.deleteTodoInit = Object.assign({method: 'DELETE'}, this.todosInit);
     }
 
-    getTodos() {
+    listTodos() {
         return fetch(this.todosUri, this.getTodosInit);
     }
 
-    postTodo(todo) {
+    addTodo(todo) {
         const init = Object.assign({body: JSON.stringify(todo)}, this.postTodoInit);
         return fetch(this.todosUri, init);
     }
 
-    putTodo(todo) {
+    updateTodo(todo) {
         const init = Object.assign({body: JSON.stringify(todo)}, this.putTodoInit);
         return fetch(this.todosUri, init);
     }
 
-    deleteTodo(todo) {
+    removeTodo(todo) {
         const uri = this.todosUri + '/' + todo.id;
         return fetch(uri, this.deleteTodoInit);
     }
