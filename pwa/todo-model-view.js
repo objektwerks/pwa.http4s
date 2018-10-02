@@ -38,7 +38,7 @@ export default class TodoModelView {
     }
 
     setTodoList() {
-        console.log('setTodoList...', this.todos);
+        console.log('setTodoList: map of todos', this.todos);
         this.unsetTodoInputs();
         for (let [id, todo] of this.todos) {
             let span = document.createElement('span');
