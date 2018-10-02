@@ -28,13 +28,13 @@ export default class TodoModelView {
     init() {
         this.todoService.listTodos()
             .then(arrayOfTodos => {
-                console.log('init: arrayOfTodos', arrayOfTodos);
+                console.log('init: array of todos', arrayOfTodos);
                 for (let todo of arrayOfTodos) {
                     this.todos.set(todo.id + '', todo);
                 }
                 this.setTodoList();
             })
-            .catch(error => console.error('init: failed!', error));
+            .catch(error => console.error('init: error', error));
     }
 
     setTodoList() {
@@ -87,12 +87,12 @@ export default class TodoModelView {
     }
 
     onClickTodoList(event) {
-        console.log('onClickTodoList...', event.target.id, event.target.textContent);
+        console.log('onClickTodoList: todo id and task', event.target.id, event.target.textContent);
         this.setTodoInputs(event.target.id);
     }
 
     onChangeAddTodo(event) {
-        console.log('onChangeAddTodo...', event.target.value);
+        console.log('onChangeAddTodo: todo task', event.target.value);
         let task = this.addTodo.value;
         if (task !== null && task.length > 0) {
             let task = this.addTodo.value;
@@ -102,49 +102,53 @@ export default class TodoModelView {
                     todo.id = Id.id;
                     this.todos.set(todo.id + '', todo);
                     this.setTodoList();
+                    console.log('onChangeAddTodo: added', todo);
                 })
                 .catch(error => console.error('onChangeAddTodo: error', error));
         }
     };
 
     onClickRemoveTodo(event) {
-        console.log('onClickRemoveTodo...', event.target.id);
+        console.log('onClickRemoveTodo: todo id', event.target.id);
         let todo = this.todos.get(event.target.id);
         this.todoService.removeTodo(todo)
             .then(Count => {
                 let count = Count.count;
                 if (count === 1) {
-                    console.log('onClickRemoveTodo: removed...', count);
                     this.todos.delete(todo.id + '');
                     this.setTodoList();
+                    console.log('onClickRemoveTodo: removed', count);
                 } else {
-                    console.error('onClickRemoveTodo: remove failed!', count);
+                    console.error('onClickRemoveTodo: remove count !== 1', count);
                 }
             })
             .catch(error => console.error('onClickRemoveTodo: error', error));
     };
 
     onChangeTodoClosed(event) {
-        console.log('onChangeTodoClosed...', event.target.value);
+        console.log('onChangeTodoClosed: new value', event.target.value);
         let todo = this.todos.get(this.todoId.value);
         todo.closed = new Date(event.target.value).getTime();
         this.onChangeUpdateTodo(todo);   
     };
 
     onChangeTodoTask(event) {
-        console.log('onChangeTodoTask...', event.target.value);
+        console.log('onChangeTodoTask: new value', event.target.value);
         let todo = this.todos.get(this.todoId.value);
         todo.task = event.target.value;
         this.onChangeUpdateTodo(todo);   
     };
 
     onChangeUpdateTodo(todo) {
-        console.log('onChangeUpdateTodo...', todo);
+        console.log('onChangeUpdateTodo: todo', todo);
         this.todoService.updateTodo(todo)
             .then(Count => {
                 let count = Count.count;
-                if (count < 1) console.error('onChangeUpdateTodo: put todo.task failed!', count);
+                if (count > 0)
+                    console.log('onChangeUpdateTodo: update count', count);  
+                else
+                    console.error('onChangeUpdateTodo: update count < 1', count);
             })
-            .catch(error => console.error('onChangeUpdateTodo: put todo.task error', error));   
+            .catch(error => console.error('onChangeUpdateTodo: error', error));   
     };
 }
