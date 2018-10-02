@@ -27,9 +27,6 @@ export default class TodoModelView {
 
     init() {
         this.todoService.listTodos()
-            .then(response => {
-                return response.json()
-            })
             .then(arrayOfTodos => {
                 console.log('init: arrayOfTodos', arrayOfTodos);
                 for (let todo of arrayOfTodos) {
@@ -101,9 +98,6 @@ export default class TodoModelView {
             let task = this.addTodo.value;
             let todo = new Todo(task);
             this.todoService.addTodo(todo)
-                .then(response => {
-                    return response.json()
-                })
                 .then(Id => {
                     todo.id = Id.id;
                     this.todos.set(todo.id + '', todo);
@@ -117,9 +111,6 @@ export default class TodoModelView {
         console.log('onClickRemoveTodo...', event.target.id);
         let todo = this.todos.get(event.target.id);
         this.todoService.removeTodo(todo)
-            .then(response => {
-                return response.json()
-            })
             .then(Count => {
                 let count = Count.count;
                 if (count === 1) {
@@ -150,9 +141,6 @@ export default class TodoModelView {
     onChangeUpdateTodo(todo) {
         console.log('onChangeUpdateTodo...', todo);
         this.todoService.updateTodo(todo)
-            .then(response => {
-                return response.json()
-            })
             .then(Count => {
                 let count = Count.count;
                 if (count < 1) console.error('onChangeUpdateTodo: put todo.task failed!', count);

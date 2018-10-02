@@ -17,21 +17,25 @@ export default class TodoService {
     }
 
     listTodos() {
-        return fetch(this.todosUri, this.getTodosInit);
+        return fetch(this.todosUri, this.getTodosInit)
+            .then(response => { return response.json() });
     }
 
     addTodo(todo) {
         const init = Object.assign({body: JSON.stringify(todo)}, this.postTodoInit);
-        return fetch(this.todosUri, init);
+        return fetch(this.todosUri, init)
+            .then(response => { return response.json() });
     }
 
     updateTodo(todo) {
         const init = Object.assign({body: JSON.stringify(todo)}, this.putTodoInit);
-        return fetch(this.todosUri, init);
+        return fetch(this.todosUri, init)
+            .then(response => { return response.json() });
     }
 
     removeTodo(todo) {
         const uri = this.todosUri + '/' + todo.id;
-        return fetch(uri, this.deleteTodoInit);
+        return fetch(uri, this.deleteTodoInit)
+            .then(response => { return response.json() });
     }
 }
