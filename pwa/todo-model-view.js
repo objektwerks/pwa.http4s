@@ -95,7 +95,6 @@ export default class TodoModelView {
         console.log('onChangeAddTodo: todo task', event.target.value);
         let task = this.addTodo.value;
         if (task !== null && task.length > 0) {
-            let task = this.addTodo.value;
             let todo = new Todo(task);
             this.todoService.addTodo(todo)
                 .then(Id => {
