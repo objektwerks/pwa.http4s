@@ -40,7 +40,6 @@ export default class TodoModelView {
     setTodoList() {
         console.log('setTodoList: map of todos', this.todos);
         this.unsetTodoInputs();
-        this.todos.clear();
         for (let [id, todo] of this.todos) {
             let span = document.createElement('span');
             span.setAttribute('id', id);
@@ -75,6 +74,7 @@ export default class TodoModelView {
     }
 
     unsetTodoInputs() {
+        this.todos.clear();
         this.todoList.innerHTML = '';
         this.addTodo.value = '';
         this.todoId.value = 0;
