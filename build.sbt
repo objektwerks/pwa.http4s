@@ -8,24 +8,24 @@ libraryDependencies ++= {
   val http4sVersion = "0.18.20"
   val circeVersion = "0.11.1"
   Seq(
-    "org.typelevel" % "cats-core_2.12" % catsVersion,
-    "org.typelevel" % "cats-effect_2.12" % "0.10.1",
-    "io.circe" % "circe-core_2.12" % circeVersion,
-    "io.circe" % "circe-generic_2.12" % circeVersion,
-    "com.chuusai" % "shapeless_2.12" % "2.3.3",
-    "org.tpolecat" % "doobie-core_2.12" % doobieVersion,
-    "org.tpolecat" % "doobie-h2_2.12" % doobieVersion,
-    "org.tpolecat" % "doobie-hikari_2.12" % doobieVersion,
-    "org.http4s" % "http4s-blaze-client_2.12" % http4sVersion,
-    "org.http4s" % "http4s-blaze-server_2.12" % http4sVersion,
-    "org.http4s" % "http4s-circe_2.12" % http4sVersion,
-    "org.http4s" % "http4s-dsl_2.12" % http4sVersion,
-    "org.http4s" % "http4s-server_2.12" % http4sVersion,
-    "co.fs2" % "fs2-core_2.12" % "0.10.6",
-    "com.github.pureconfig" % "pureconfig_2.12" % "0.9.2",
-    "com.typesafe.scala-logging" % "scala-logging_2.12" % "3.9.0",
+    "org.typelevel" %% "cats-core" % catsVersion,
+    "org.typelevel" %% "cats-effect" % "0.10.1",
+    "io.circe" %% "circe-core" % circeVersion,
+    "io.circe" %% "circe-generic" % circeVersion,
+    "com.chuusai" %% "shapeless" % "2.3.3",
+    "org.tpolecat" %% "doobie-core" % doobieVersion,
+    "org.tpolecat" %% "doobie-h2" % doobieVersion,
+    "org.tpolecat" %% "doobie-hikari" % doobieVersion,
+    "org.http4s" %% "http4s-blaze-client" % http4sVersion,
+    "org.http4s" %% "http4s-blaze-server" % http4sVersion,
+    "org.http4s" %% "http4s-circe" % http4sVersion,
+    "org.http4s" %% "http4s-dsl" % http4sVersion,
+    "org.http4s" %% "http4s-server" % http4sVersion,
+    "co.fs2" %% "fs2-core" % "0.10.6",
+    "com.github.pureconfig" %% "pureconfig" % "0.9.2",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
-    "org.tpolecat" % "doobie-scalatest_2.12" % doobieVersion % Test,
-    "org.scalatest" % "scalatest_2.12" % "3.0.5" % Test
+    "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
+    "org.scalatest" %% "scalatest" % "3.0.8" % Test
   )
 }
