@@ -1,11 +1,11 @@
 name := "pwa.http4s"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.9"
+scalaVersion := "2.12.10"
 libraryDependencies ++= {
-  val catsVersion = "1.6.0"
-  val doobieVersion = "0.5.3"
-  val http4sVersion = "0.18.20"
+  val catsVersion = "1.6.1"
+  val doobieVersion = "0.5.4"
+  val http4sVersion = "0.18.24"
   val circeVersion = "0.11.1"
   Seq(
     "org.typelevel" %% "cats-core" % catsVersion,
