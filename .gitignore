@@ -1,11 +1,11 @@
-.bloop
-.metals
-.idea
-.vscode
-target/
+.*
+!/.gitignore
+project/.bloop
 project/metals.sbt
 project/project/
 project/target/
+target/
+.DS_Store
 pwa/node_modules
 pwa/package-lock.json
 pwa/dist
@@ -13,4 +13,3 @@ pwa/*.zip
 pwa/.eslintignore
 pwa/.eslintrc.json
 pwa/.DS_Store
-.DS_Store
