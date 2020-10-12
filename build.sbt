@@ -1,7 +1,7 @@
 name := "pwa.http4s"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.11"
+scalaVersion := "2.12.12"
 libraryDependencies ++= {
   val catsVersion = "1.6.1"
   val doobieVersion = "0.5.4"
@@ -26,6 +26,6 @@ libraryDependencies ++= {
     "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.0.8" % Test
+    "org.scalatest" %% "scalatest" % "3.0.9" % Test
   )
 }
