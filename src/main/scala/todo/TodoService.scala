@@ -1,8 +1,10 @@
 package todo
 
 import cats.effect._
+
 import io.circe.generic.auto._
 import io.circe.syntax._
+
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.impl.Root
@@ -26,10 +28,13 @@ class TodoService(repository: TodoRepository) {
         response <- Ok(repository.update(todo).asJson)
       } yield response
 
-    case DELETE -> Root / "todos" / IntVar(id) => Ok(repository.delete(id).asJson)
+    case DELETE -> Root / "todos" / IntVar(id) =>
+      Ok(repository.delete(id).asJson)
   }
 }
 
 object TodoService {
-  def apply(repository: TodoRepository): TodoService = new TodoService(repository)
+  def apply(repository: TodoRepository): TodoService = new TodoService(
+    repository
+  )
 }
