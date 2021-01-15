@@ -1,7 +1,6 @@
 PWA Http4s App
 --------------
->Progressive web app ( PWA ) with an Http4s server. See ( https://github.com/objektwerks/pwa )
-for more details on PWA concepts.
+>Progressive web app ( PWA ) with an Http4s server.
 
 Install
 -------
