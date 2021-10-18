@@ -23,7 +23,7 @@ libraryDependencies ++= {
     "org.http4s" %% "http4s-server" % http4sVersion,
     "co.fs2" %% "fs2-core" % "0.10.6",
     "com.github.pureconfig" %% "pureconfig" % "0.9.2",
-    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
     "ch.qos.logback" % "logback-classic" % "1.2.5",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
     "org.scalatest" %% "scalatest" % "3.2.10" % Test
