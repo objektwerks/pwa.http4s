@@ -26,6 +26,6 @@ libraryDependencies ++= {
     "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
     "ch.qos.logback" % "logback-classic" % "1.2.11",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.2.11" % Test
+    "org.scalatest" %% "scalatest" % "3.2.12" % Test
   )
 }
