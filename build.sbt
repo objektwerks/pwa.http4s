@@ -24,7 +24,7 @@ libraryDependencies ++= {
     "co.fs2" %% "fs2-core" % "0.10.7",
     "com.github.pureconfig" %% "pureconfig" % "0.17.1",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-    "ch.qos.logback" % "logback-classic" % "1.5.2",
+    "ch.qos.logback" % "logback-classic" % "1.5.3",
     "org.tpolecat" %% "doobie-scalatest" % doobieVersion % Test,
     "org.scalatest" %% "scalatest" % "3.2.18" % Test
   )
